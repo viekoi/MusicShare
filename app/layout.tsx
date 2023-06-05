@@ -1,7 +1,10 @@
 import './globals.css'
-import Navbar from '@/components/navbar/Navbar'
 import { Poppins } from 'next/font/google'
 
+import SupabaseProvider from '@/providers/SupabaseProvider'
+import UserProvider from '@/providers/UserProvider'
+import ModalProvider from '@/providers/ModalProvider'
+import Navbar from '@/components/navbar/Navbar'
 
 const poppins = Poppins({ subsets: ['latin'],weight:'400'})
 
@@ -18,9 +21,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <Navbar/>
-        {children}
-        
+        <SupabaseProvider>
+          <UserProvider>
+            <ModalProvider/>
+            <Navbar/>
+            {children}
+          </UserProvider>
+        </SupabaseProvider>
       </body>
     </html>
   )
