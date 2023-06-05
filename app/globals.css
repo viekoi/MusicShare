@@ -2,26 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+
+body{
+ @apply bg-[#333] text-white
+
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.list{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20vh;
+    padding: clamp(1rem,5vw,6rem);
+
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+
+.list > .songItem{
+    color: rgba(255, 255 , 255, 0.25);
+    
+    font-weight: 300;
+    text-decoration: none;
+    position: relative;
+    cursor: pointer;
+    
+
+}
+
+.list > .songItem:hover{
+ color: white;    
+}
+
+.list > .songItem > span{
+    display: block;
+    border-bottom: 1px solid transparent ;
+    border-top: 1px solid transparent ;
+    position: relative;
+    z-index: 2;
+    
+
+}
+
+.list > .songItem:hover > span{
+    border-top-color:white;
+    border-bottom-color: white;
+
+}
+
+.list > .songItem > img {
+    position: absolute;
+    opacity: 0;
+    transform: translate(-50%,-50%) scale(0.5);
+    transition: transform 250ms, opacity 250ms;
+    pointer-events: none;
+    width: min(50vw,500px);
+
+
+}
+
+.list >.songItem:hover > img{
+    opacity: 1;
+    transform: translate(-50%,-50%) scale(1);
 }

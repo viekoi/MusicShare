@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+    images: {
+        domains: ['nld.mediacdn.vn']
+      }
+}
 
 module.exports = nextConfig
