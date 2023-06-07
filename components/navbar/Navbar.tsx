@@ -1,15 +1,21 @@
 "use client";
 import React from "react";
-import { FaUserAlt } from "react-icons/fa";
+import { AiOutlineSearch } from 'react-icons/ai'
+
+
 
 import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
+import useSearchModal from "@/hooks/useSearchModal";
 import Button from "../Button";
 import Dropdown from '../Dropdown'
 
+
+
+
 const Navbar = () => {
   const authModal = useAuthModal();
-
+  const searchModal = useSearchModal()
   const { user } = useUser();
 
 
@@ -19,11 +25,19 @@ const Navbar = () => {
         <>
           <div className="w-full z-[50]">
             <div className=" mx-auto max-w-[1280px] px-2">
-              <div className="flex justify-end h-[80px] items-center gap-1">
-               <Button className="text-white p-2 text-[10px] sm:text-[15px]  bg-gray-400 ">
-                  <FaUserAlt />
-               </Button>
-               <Dropdown/>
+              <div className="flex justify-between  h-[80px] items-center gap-2">
+                <div className=" flex gap-2 items-center justify-self-center ">
+                 
+                </div>
+
+                <div className=" flex gap-2 items-center justify-self-center ">
+                  <Button onClick={searchModal.onOpen}>
+                    <AiOutlineSearch size={20} className="text-gray-400" />
+                  </Button>
+                  <Dropdown />
+                </div>
+
+
               </div>
             </div>
           </div>

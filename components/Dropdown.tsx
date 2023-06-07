@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { RxHamburgerMenu } from "react-icons/rx";
-
+import { FaUserAlt } from "react-icons/fa";
+import { toast } from 'react-hot-toast'
+import useUploadModal from "@/hooks/useUploadModal";
 import Button from "./Button";
 
 const DropdownMenuDemo = () => {
+  const uploadModal = useUploadModal()
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
 
@@ -16,16 +18,15 @@ const DropdownMenuDemo = () => {
     router.refresh();
 
     if (error) {
-      // toast.error(error.message)
-      console.log(error);
+      toast.error(error.message)
     }
   };
 
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger asChild>
-        <Button className="text-white p-2 text-[10px] sm:text-[15px]  bg-gray-400 ">
-          <RxHamburgerMenu />
+      <DropdownMenu.Trigger asChild className=" outline-none">
+        <Button className="text-white p-2 text-[10px] sm:text-[15px]  bg-gray-400 " aria-label="Customise options">
+          <FaUserAlt />
         </Button>
       </DropdownMenu.Trigger>
 
@@ -35,13 +36,31 @@ const DropdownMenuDemo = () => {
           sideOffset={5}
         >
           <DropdownMenu.Item
-            onClick={handleLogout}
-            className="group text-[13px] leading-none text-black rounded-[3px] flex items-center h-[25px] px-[5px] relative pl-[25px] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+            onClick={()=>{}}
+            className=" hover:bg-gray-400  text-[13px] leading-none text-black rounded-[3px] flex items-center h-[25px] px-[5px] relative pl-[25px] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
           >
-            Đăng xuất{" "}
-            {/* <div className="ml-auto pl-[20px] text-mauve11 group-data-[highlighted]:text-black/50 group-data-[disabled]:text-mauve8">
-                ⌘+T
-              </div> */}
+            Thông tin cá nhân
+          </DropdownMenu.Item>
+          <DropdownMenu.Item
+             onClick={uploadModal.onOpen}
+            className=" hover:bg-gray-400  text-[13px] leading-none text-black rounded-[3px] flex items-center h-[25px] px-[5px] relative pl-[25px] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+          >
+            Thêm một bài nhạc
+          </DropdownMenu.Item>
+
+          <DropdownMenu.Item
+            onClick={()=> router.push(`/uploaded`)}
+            className=" hover:bg-gray-400 text-[13px] leading-none text-black rounded-[3px] flex items-center h-[25px] px-[5px] relative pl-[25px] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+          >
+            Nhạc của tôi
+          </DropdownMenu.Item>
+
+
+          <DropdownMenu.Item
+            onClick={handleLogout}
+            className=" hover:bg-gray-400 text-[13px] leading-none text-black rounded-[3px] flex items-center h-[25px] px-[5px] relative pl-[25px] select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+          >
+            Đăng xuất
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Portal>

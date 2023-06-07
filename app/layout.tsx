@@ -1,6 +1,6 @@
 import './globals.css'
 import { Poppins } from 'next/font/google'
-
+import ToasterProvider from '@/providers/ToasterProvider'
 import SupabaseProvider from '@/providers/SupabaseProvider'
 import UserProvider from '@/providers/UserProvider'
 import ModalProvider from '@/providers/ModalProvider'
@@ -23,6 +23,7 @@ export default function RootLayout({
       <body className={poppins.className}>
         <SupabaseProvider>
           <UserProvider>
+            <ToasterProvider/>
             <ModalProvider/>
             <Navbar/>
             {children}
