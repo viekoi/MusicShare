@@ -7,6 +7,7 @@ import {
 
 import { UserDetails } from '@/types';
 
+
 type UserContextType = {
   accessToken: string | null;
   user: User | null;
@@ -24,6 +25,9 @@ export interface Props {
 }
 
 export const MyUserContextProvider = (props: Props) => {
+
+ 
+
   const {
     session,
     isLoading: isLoadingUser,
@@ -49,7 +53,7 @@ export const MyUserContextProvider = (props: Props) => {
             setUserDetails(userDetailsPromise.value.data as UserDetails);
 
         
-
+          
           setIsloadingData(false);
         }
       );

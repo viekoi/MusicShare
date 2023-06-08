@@ -1,93 +1,120 @@
-'use client'
-import React, { useState, useEffect } from 'react'
+"use client";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import qs from "query-string";
-import { Song } from '@/types';
+import { toast } from "react-hot-toast";
+import { Song } from "@/types";
 
-import getSongsByTitle from '@/actions/client/getSongByTitle';
-import useSearchModal from '@/hooks/useSearchModal'
-import useDebounce from '@/hooks/useDebounce';
-import Input from '../inputs/Input';
-import Modal from './Modal'
+import getSongsByTitle from "@/actions/client/getSongByTitle";
+import useSearchModal from "@/hooks/useSearchModal";
+import useDebounce from "@/hooks/useDebounce";
+import Input from "../inputs/Input";
+import Modal from "./Modal";
+import MediaItem from "../SearchItem";
 
-
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import Button from "../Button";
 const SearchModal = () => {
-  const supabase = createClientComponentClient()
+ 
   const [isLoading, setIsLoading] = useState(false);
-  const [value, setValue] = useState<string>('');
+  const [value, setValue] = useState<string>("");
   const debouncedValue = useDebounce<string>(value, 500);
-  console.log(debouncedValue)
-  const [searchSongs, setSearchSongs] = useState<Song[]>([])
 
-  const searchModal = useSearchModal()
+
+
+  
+
+  const [searchSongs, setSearchSongs] = useState<Song[]>([]);
+  const searchModal = useSearchModal();
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-  } = useForm<FieldValues>({
+  const { register, handleSubmit, reset } = useForm<FieldValues>({
     defaultValues: {
-      title: '',
-    }
+      title:"",
+    },
   });
-
 
   const onChange = (open: boolean) => {
     if (!open) {
       reset();
       searchModal.onClose();
     }
+  };
+
+
+  const handleClickSong = (song:Song)=>{
+    setIsLoading(true);
+    router.push(`search/${song.id}`)
+    searchModal.onClose()
+    setValue("")
+    setIsLoading(false);
+      reset();
   }
+
+
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
+   
+    try {
+      setIsLoading(true);
 
-  }
 
+      const query = {
+        title: value,
+      };
 
- 
+      const url = qs.stringifyUrl({
+        url: "/search",
+        query,
+      });
 
+      router.push(url);
+      setValue("")
+      setIsLoading(false);
+      reset();
+      searchModal.onClose();
+    } catch (error) {
+      toast.error("Đã có lỗi");
+    }
+  };
 
   const getSearchSongs = async (title: string) => {
-    const songs = await getSongsByTitle(title)
-    setSearchSongs(songs)
-  }
-
+    const songs = await getSongsByTitle(title);
+    setSearchSongs(songs);
+  };
 
   useEffect(() => {
-    getSearchSongs(debouncedValue)
-
-
-  }, [debouncedValue])
-
+    getSearchSongs(value);
+  }, [debouncedValue]);
 
 
   return (
-    <Modal isOpen={searchModal.isOpen} title={'Tìm một bài hát'} onChange={onChange} description=''>
-      <form onSubmit={onSubmit} >
+    <Modal
+      isOpen={searchModal.isOpen}
+      title={"Tìm một bài hát"}
+      onChange={onChange}
+      description=""
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Input
           id="title"
           disabled={isLoading}
-          {...register('title')}
-          placeholder='Tìm một bài hát'
+          {...register("title")}
+          placeholder="Tìm một bài hát"
           onChange={(e) => setValue(e.target.value)}
         />
       </form>
       {
-
-
-        <>
+        <div className="mt-2">
           {searchSongs.map((song) => {
-            return (
-              <p key={song.id} className="">{song.title}</p>
-            )
+            return <MediaItem data={song} onClick={()=>{
+              handleClickSong(song)
+            }} />;
           })}
-        </>
+        </div>
       }
     </Modal>
-  )
-}
+  );
+};
 
-export default SearchModal
+export default SearchModal;

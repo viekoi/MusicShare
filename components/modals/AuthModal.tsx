@@ -15,17 +15,17 @@ import Modal from './Modal';
 
 const AuthModal = () => {
   const { session } = useSessionContext();
-  const router = useRouter();
+
   const { onClose, isOpen } = useAuthModal();
   
   const supabaseClient = useSupabaseClient();
 
   useEffect(() => {
     if (session) {
-      router.refresh();
       onClose();
+      
     }
-  }, [session, router, onClose]);
+  }, [session, onClose]);
 
   const onChange = (open: boolean) => {
     if (!open) {

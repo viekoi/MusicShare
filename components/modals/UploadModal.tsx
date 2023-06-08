@@ -144,7 +144,7 @@ const UploadModal = () => {
       reset();
       uploadModal.onClose();
     } catch (error) {
-      toast.error('Something went wrong');
+     toast.error('Đã có lỗi');
     } finally {
       setIsLoading(false);
     }

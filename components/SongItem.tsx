@@ -1,6 +1,8 @@
 'use client'
+
 import React, {useCallback} from 'react'
 import useLoadImage from '@/hooks/useLoadImage'
+import LikeButton from './LikeButton';
 
 interface SongItemProps{
   id:string,
@@ -51,9 +53,12 @@ const SongItem:React.FC<SongItemProps> = ({id,userId,author,title,songPath,image
   
 
   return (
-    <div className="songItem" ref={divEleRef} onClick={handleClick}>
-      <span className=' xl:text-[50px] lg:text-[40px] md:text-[30px]  text-[15px]'>{`${title} - ${author} `}</span>
+    <div className="songItem group" ref={divEleRef} onClick={handleClick}>
+      <span className=' xl:text-[50px] lg:text-[40px] md:text-[30px]  text-[15px]'>{`${title} - ${author} `}
+      <LikeButton className=' hidden group-hover:block' songId={id}/>
+      </span>
       {imagePath &&  <img  src={imagePath} alt="image" /> }
+     
     </div>
   )
 }

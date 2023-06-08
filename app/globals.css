@@ -2,64 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
-
-body{
- @apply bg-[#333] text-white
-
+body {
+  @apply bg-[#333] text-white;
 }
 
-.list{
-    display: flex;
-    flex-direction: column;
-    margin-top: 20vh;
-    padding: clamp(1rem,5vw,6rem);
-
+.list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20vh;
+  padding: clamp(1rem, 5vw, 6rem);
 }
 
-
-.list > .songItem{
-    color: rgba(255, 255 , 255, 0.25);
-    
-    font-weight: 300;
-    text-decoration: none;
-    position: relative;
-    cursor: pointer;
-    
-
+.list > .songItem {
+  color: rgba(255, 255, 255, 0.25);
+  font-weight: 300;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
 }
 
-.list > .songItem:hover{
- color: white;    
+.list > .songItem:hover {
+  color: white;
 }
 
-.list > .songItem > span{
-    display: block;
-    border-bottom: 1px solid transparent ;
-    border-top: 1px solid transparent ;
-    position: relative;
-    z-index: 2;
-    
-
+.list > .songItem > span {
+  display: flex;
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  position: relative;
+  z-index: 2;
+  align-items: center;
+  gap: 8px;
 }
 
-.list > .songItem:hover > span{
-    border-top-color:white;
-    border-bottom-color: white;
-
+.list > .songItem:hover > span {
+  border-top-color: white;
+  border-bottom-color: white;
 }
 
 .list > .songItem > img {
-    position: absolute;
-    opacity: 0;
-    transform: translate(-50%,-50%) scale(0.5);
-    transition: transform 250ms, opacity 250ms;
-    pointer-events: none;
-    width: min(50vw,500px);
-
-
+  position: absolute;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5);
+  transition: transform 250ms, opacity 250ms;
+  pointer-events: none;
+  width: min(50vw, 500px);
+  image-resolution: from-image;
 }
 
-.list >.songItem:hover > img{
-    opacity: 1;
-    transform: translate(-50%,-50%) scale(1);
+.list > .songItem:hover > img {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }

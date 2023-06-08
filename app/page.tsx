@@ -1,3 +1,4 @@
+
 import { MdShuffle } from 'react-icons/md'
 import { BiRepeat } from 'react-icons/bi'
 import { IoVolumeMedium } from 'react-icons/io5'
@@ -18,7 +19,7 @@ export default async function Home() {
       </div>
       {songs.map((song) => {
         return (
-          <SongItem id={song.id} userId={song.user_id} author={song.author} title={song.title} songPath={song.song_path} imagePath={song.image_path} />
+          <SongItem  key={song.id} id={song.id} userId={song.user_id} author={song.author} title={song.title} songPath={song.song_path} imagePath={song.image_path} />
         )
       })}
 

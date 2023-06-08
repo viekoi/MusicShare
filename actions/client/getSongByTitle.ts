@@ -10,7 +10,7 @@ const getSongsByTitle = async (title: string): Promise<Song[]> => {
       .select('*')
       .ilike('title', `%${title}%`)
       .order('created_at', { ascending: false })
-      .limit(2)
+      .limit(6)
 
     if (error) {
       console.log(error.message);

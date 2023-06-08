@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React,{useCallback} from "react";
 import { AiOutlineSearch } from 'react-icons/ai'
 
 
@@ -16,8 +16,12 @@ import Dropdown from '../Dropdown'
 const Navbar = () => {
   const authModal = useAuthModal();
   const searchModal = useSearchModal()
-  const { user } = useUser();
+  const { user,isLoading } = useUser()
 
+  if(isLoading) {
+    return <div className="h-[80px]">
+    </div>
+  }
 
   return (
     <>
