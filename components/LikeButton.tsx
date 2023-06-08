@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { twMerge } from "tailwind-merge";
+
 
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { toast } from "react-hot-toast";
 import { useSessionContext } from "@supabase/auth-helpers-react";
+
 import Button from "./Button";
 
 import { useUser } from "@/hooks/useUser";
@@ -13,7 +14,7 @@ import useAuthModal from "@/hooks/useAuthModal";
 
 interface LikeButtonProps {
   songId: string;
-  className:string
+  className?:string
 };
 
 const LikeButton: React.FC<LikeButtonProps> = ({
@@ -50,7 +51,8 @@ const LikeButton: React.FC<LikeButtonProps> = ({
 
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
 
-  const handleLike = async () => {
+  const handleLike = async (event:any) => {
+    event.stopPropagation()
     if (!user) {
       return authModal.onOpen();
     }
@@ -82,6 +84,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({
         toast.success('Đã thích');
       }
     }
+
 
   
   }

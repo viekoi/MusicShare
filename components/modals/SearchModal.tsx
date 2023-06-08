@@ -5,7 +5,7 @@ import qs from "query-string";
 import { toast } from "react-hot-toast";
 import { Song } from "@/types";
 
-import getSongsByTitle from "@/actions/client/getSongByTitle";
+
 import useSearchModal from "@/hooks/useSearchModal";
 import useDebounce from "@/hooks/useDebounce";
 import Input from "../inputs/Input";
@@ -13,18 +13,19 @@ import Modal from "./Modal";
 import MediaItem from "../SearchItem";
 
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import Button from "../Button";
+import useGetSongsByTitle from "@/hooks/useGetSongsByTitle";
+
 const SearchModal = () => {
  
   const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState<string>("");
   const debouncedValue = useDebounce<string>(value, 500);
-
+  const {songs} = useGetSongsByTitle(debouncedValue);
 
 
   
 
-  const [searchSongs, setSearchSongs] = useState<Song[]>([]);
+
   const searchModal = useSearchModal();
   const router = useRouter();
 
@@ -78,14 +79,8 @@ const SearchModal = () => {
     }
   };
 
-  const getSearchSongs = async (title: string) => {
-    const songs = await getSongsByTitle(title);
-    setSearchSongs(songs);
-  };
 
-  useEffect(() => {
-    getSearchSongs(value);
-  }, [debouncedValue]);
+
 
 
   return (
@@ -106,8 +101,8 @@ const SearchModal = () => {
       </form>
       {
         <div className="mt-2">
-          {searchSongs.map((song) => {
-            return <MediaItem data={song} onClick={()=>{
+          {songs.map((song) => {
+            return <MediaItem key={song.id} data={song} onClick={()=>{
               handleClickSong(song)
             }} />;
           })}

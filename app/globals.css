@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-[#333] text-white;
+  @apply bg-[#333] text-white overflow-hidden;
 }
 
 .list {
@@ -46,8 +46,7 @@ body {
   transform: translate(-50%, -50%) scale(0.5);
   transition: transform 250ms, opacity 250ms;
   pointer-events: none;
-  width: min(50vw, 500px);
-  image-resolution: from-image;
+  /* width: min(50vw, 500px); */
 }
 
 .list > .songItem:hover > img {

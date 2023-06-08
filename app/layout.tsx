@@ -5,6 +5,7 @@ import SupabaseProvider from '@/providers/SupabaseProvider'
 import UserProvider from '@/providers/UserProvider'
 import ModalProvider from '@/providers/ModalProvider'
 import Navbar from '@/components/navbar/Navbar'
+import Player from '@/components/Player'
 
 const poppins = Poppins({ subsets: ['latin'],weight:'400'})
 
@@ -27,6 +28,7 @@ export default function RootLayout({
             <ModalProvider/>
             <Navbar/>
             {children}
+            <Player />
           </UserProvider>
         </SupabaseProvider>
       </body>

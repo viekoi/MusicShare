@@ -3,9 +3,9 @@ import { cookies } from "next/headers";
 
 import { Song } from "@/types";
 
-import getSongs from "./getSongs";
 
-const getSongById = async (id: string): Promise<Song> => {
+
+const getSongById = async (id: string): Promise<Song[]> => {
   const supabase = createServerComponentClient({
     cookies: cookies
   });
@@ -21,7 +21,7 @@ const getSongById = async (id: string): Promise<Song> => {
     console.log(error.message);
   }
 
-  return (data as any) || undefined;
+  return (data as any) || [];
 };
 
 export default getSongById;
