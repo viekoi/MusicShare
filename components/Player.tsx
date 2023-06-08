@@ -26,6 +26,7 @@ const Player = () => {
         py-2 
         h-[80px] 
         px-4
+        z-[50]
       "
     >
       <PlayerContent key={songUrl} song={song} songUrl={songUrl} />

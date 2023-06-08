@@ -15,9 +15,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     <button
       type={type}
       className={twMerge(
-        `      
+        `   
         rounded-full 
-
         border
         border-transparent
         disabled:cursor-not-allowed 

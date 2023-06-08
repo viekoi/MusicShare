@@ -2,14 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+*{
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
-  @apply bg-[#333] text-white overflow-hidden;
+  @apply bg-[#333] text-white;
 }
 
 .list {
   display: flex;
   flex-direction: column;
-  margin-top: 20vh;
+  margin-top: 10vh;
   padding: clamp(1rem, 5vw, 6rem);
 }
 
@@ -46,7 +50,7 @@ body {
   transform: translate(-50%, -50%) scale(0.5);
   transition: transform 250ms, opacity 250ms;
   pointer-events: none;
-  /* width: min(50vw, 500px); */
+  max-width: 200px;
 }
 
 .list > .songItem:hover > img {

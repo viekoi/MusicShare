@@ -11,6 +11,7 @@ interface SongItemProps{
   title: string;
   songPath: string;
   imagePath: string;
+  active?:boolean
   onClick:(id:string)=>void
 }
 
@@ -18,7 +19,7 @@ interface SongItemProps{
 
 
 
-const SongItem:React.FC<SongItemProps> = ({id,userId,author,title,songPath,imagePath:path,onClick}) => {
+const SongItem:React.FC<SongItemProps> = ({id,userId,author,title,songPath,imagePath:path,onClick,active}) => {
 
 
   const imagePath = useLoadImage(path);
@@ -53,7 +54,7 @@ const SongItem:React.FC<SongItemProps> = ({id,userId,author,title,songPath,image
   
 
   return (
-    <div className="songItem group" ref={divEleRef} onClick={handleClick}>
+    <div className={`songItem group`} ref={divEleRef} onClick={handleClick}>
       <span className=' xl:text-[50px] lg:text-[40px] md:text-[30px]  text-[15px]'>{`${title} - ${author} `}
       <LikeButton className=' hidden group-hover:block' songId={id}/>
       </span>
