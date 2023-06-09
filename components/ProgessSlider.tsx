@@ -1,11 +1,11 @@
 "use client";
 
 import * as RadixSlider from '@radix-ui/react-slider';
-import { MdDepartureBoard } from 'react-icons/md';
+
 
 interface ProgessSlideProps {
-  value?: number;
-  onChange?: (value: number) => void;
+  value: number;
+  onChange: (value: number) => void;
   duration:number | undefined
 }
 
@@ -17,7 +17,7 @@ const ProgessSlider: React.FC<ProgessSlideProps > = ({
 
   
 
-  if(duration === undefined) return
+  
 
   const handleChange = (newValue: number[]) => {
     onChange?.(newValue[0]);
@@ -47,7 +47,8 @@ const ProgessSlider: React.FC<ProgessSlideProps > = ({
           relative 
           grow 
           rounded-full 
-          h-[3px]
+          h-[5px]
+          cursor-pointer
         "
       >
         <RadixSlider.Range 
