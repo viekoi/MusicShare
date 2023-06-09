@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import useLoadImage from "@/hooks/useLoadImage";
 import { Song } from "@/types";
-// import usePlayer from "@/hooks/usePlayer";
+import usePlayer from "@/hooks/usePlayer";
 
 interface SearchItemProps {
   data: Song;
@@ -15,7 +15,7 @@ const SearchItem: React.FC<SearchItemProps> = ({
   data,
   onClick,
 }) => {
-//   const player = usePlayer();
+  const player = usePlayer();
   const imageUrl = useLoadImage(data.image_path);
 
   const handleClick = () => {
@@ -23,7 +23,7 @@ const SearchItem: React.FC<SearchItemProps> = ({
       return onClick(data.id);
     }
   
-    // return player.setId(data.id);
+    return player.setId(data.id);
   };
 
   return ( 
