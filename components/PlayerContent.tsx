@@ -19,21 +19,19 @@ interface PlayerContentProps {
 }
 
 const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
- 
   const player = usePlayer();
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const toggleMuteVolume = useRef<number>(player.volume);
 
   const audioRef = useRef<HTMLAudioElement>(new Audio(songUrl));
 
-  audioRef.current.volume = player.volume
+  audioRef.current.volume = player.volume;
 
   const intervalRef = useRef<NodeJS.Timer>();
-  
-  const {duration} = audioRef.current
-  
+
+  const { duration } = audioRef.current;
 
   const calculateTime = (duration: number) => {
     if (!duration) return <span className="text-[10px]">00:00</span>;
@@ -57,8 +55,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     }
 
     const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-
-
 
     if (player.isRandom) {
       let randomIndex = Math.floor(Math.random() * player.ids.length);
@@ -126,107 +122,76 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
   const onPlay = () => {
     if (!audioRef.current.src) {
-      return
+      return;
     }
-    setIsPlaying(true)
-
-
-  }
-
+    setIsPlaying(true);
+  };
 
   const onPause = () => {
     if (!audioRef.current.src) {
-      return
+      return;
     }
 
-    setIsPlaying(false)
-
-
-  }
-
+    setIsPlaying(false);
+  };
 
   const handlePlay = () => {
     if (!isPlaying) {
-      onPlay()
+      audioRef.current.play();
     } else {
-      onPause()
-
+      audioRef.current.pause();
     }
-  }
+  };
 
   const toggleMute = () => {
     if (!audioRef.current.src) {
-      return
+      return;
     }
 
     if (audioRef.current?.volume === 0) {
-      audioRef.current.volume = toggleMuteVolume.current
-      player.setVolume(toggleMuteVolume.current)
+      audioRef.current.volume = toggleMuteVolume.current;
+      player.setVolume(toggleMuteVolume.current);
+    } else if (audioRef.current?.volume !== 0) {
+      toggleMuteVolume.current = audioRef.current.volume;
+      audioRef.current.volume = 0;
+      player.setVolume(0);
     }
-    else if (audioRef.current?.volume !== 0) {
-      toggleMuteVolume.current = audioRef.current.volume
-      audioRef.current.volume = 0 
-      player.setVolume(0)
-    }
-
-  }
-
-
+  };
 
   const startTimer = () => {
-    clearInterval(intervalRef.current)
+    clearInterval(intervalRef.current);
 
     intervalRef.current = setInterval(() => {
-      if (audioRef.current.ended) {
-        onPlayNext()
-      } else {
-        setProgress(audioRef.current.currentTime)
-      }
-    }, 1000)
-  }
+      setProgress(audioRef.current.currentTime);
+    }, 1000);
+  };
 
+  audioRef.current.onplay = () => {
+    onPlay();
+    startTimer();
+  };
 
-
-
-  useEffect(() => {
-    if (audioRef.current.src) {
-      if (isPlaying) {
-        audioRef.current.play();
-        startTimer();
-      } else {
-        clearInterval(intervalRef.current);
-        audioRef.current.pause();
-      }
-    } else {
-      if (isPlaying) {
-        audioRef.current = new Audio(songUrl);
-        audioRef.current.play();
-        startTimer();
-      } else {
-        clearInterval(intervalRef.current);
-        audioRef.current.pause();
-      }
+  audioRef.current.onpause = () => {
+    onPause();
+    clearInterval(intervalRef.current);
+  };
+    audioRef.current.onended = () => {
+    if(player.isRepeated){
+      return
     }
-  }, [isPlaying]);
+    onPlayNext();
+  };
 
   useEffect(() => {
-    audioRef.current.pause();
-    audioRef.current = new Audio(songUrl);
-    setProgress(audioRef.current.currentTime);
-    onPlay()
-  }, [songUrl]);
+    
 
+    audioRef.current.play();
 
-  useEffect(() => {
     return () => {
+      console.log('song ended')
       audioRef.current.pause();
-      clearInterval(intervalRef.current);
     };
-  }, []);
-
-
-
-  
+  }, [audioRef.current.src,audioRef.current.ended]);
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 h-full">
