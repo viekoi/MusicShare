@@ -13,49 +13,43 @@ import SearchItem from "./SearchItem";
 import VolumeSlider from "./VolumeSlider";
 import ProgessSlider from "./ProgessSlider";
 
-
-
-
 interface PlayerContentProps {
   song: Song;
   songUrl: string;
 }
 
-const PlayerContent: React.FC<PlayerContentProps> = ({
-  song,
-  songUrl
-}) => {
-
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0)
-
-  const audioRef = useRef<HTMLAudioElement>(new Audio(songUrl))
-  const intervalRef = useRef<NodeJS.Timer>()
-  // const isReady = useRef(false)
-  const { duration } = audioRef.current
-
-
-
-
+const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
+ 
   const player = usePlayer();
-  const [volume, setVolume] = useState(1);
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [progress, setProgress] = useState(0);
 
+  const toggleMuteVolume = useRef<number>(player.volume);
 
+  const audioRef = useRef<HTMLAudioElement>(new Audio(songUrl));
+
+  audioRef.current.volume = player.volume
+
+  const intervalRef = useRef<NodeJS.Timer>();
+  
+  const {duration} = audioRef.current
+  
 
   const calculateTime = (duration: number) => {
-    if(!duration) return(<span className="text-[10px]">00:00</span>)
+    if (!duration) return <span className="text-[10px]">00:00</span>;
     const minutes = Math.floor(duration / 60);
     const returnedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
     const seconds = Math.floor(duration % 60);
     const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
     return (
-      <span className="text-[10px]">{returnedMinutes}:{returnedSeconds}</span>
+      <span className="text-[10px]">
+        {returnedMinutes}:{returnedSeconds}
+      </span>
     );
-  }
-
+  };
 
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
-  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
+  const VolumeIcon = player.volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
   const onPlayNext = () => {
     if (player.ids.length === 0) {
@@ -63,18 +57,29 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     }
 
     const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-    const nextSong = player.ids[currentIndex + 1];
 
-    if (!nextSong) {
-      player.setId(player.ids[0]);
 
-      return
+
+    if (player.isRandom) {
+      let randomIndex = Math.floor(Math.random() * player.ids.length);
+
+      while (randomIndex === currentIndex) {
+        randomIndex = Math.floor(Math.random() * player.ids.length);
+      }
+
+      const nextSong = player.ids[randomIndex];
+
+      return player.setId(nextSong);
+    } else {
+      const nextSong = player.ids[currentIndex + 1];
+      if (!nextSong) {
+        player.setId(player.ids[0]);
+
+        return;
+      }
+      return player.setId(nextSong);
     }
-
-    player.setId(nextSong);
-
-
-  }
+  };
 
   const onPlayPrevious = () => {
     if (player.ids.length === 0) {
@@ -82,39 +87,42 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     }
 
     const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-    const previousSong = player.ids[currentIndex - 1];
 
-    if (!previousSong) {
-      return player.setId(player.ids[player.ids.length - 1]);
+    if (player.isRandom) {
+      let randomIndex = Math.floor(Math.random() * player.ids.length);
+
+      while (randomIndex === currentIndex) {
+        randomIndex = Math.floor(Math.random() * player.ids.length);
+      }
+      const previousSong = player.ids[randomIndex];
+
+      return player.setId(previousSong);
+    } else {
+      const previousSong = player.ids[currentIndex - 1];
+
+      if (!previousSong) {
+        return player.setId(player.ids[player.ids.length - 1]);
+      }
+
+      return player.setId(previousSong);
     }
-
-    player.setId(previousSong);
-
-  }
-
-
-
+  };
 
   const handleVolumeChange = (value: number) => {
     if (!audioRef.current.src) {
-      return
+      return;
     }
-
-    audioRef.current.volume = value
-    setVolume(value)
-  }
+    audioRef.current.volume = value;
+    player.setVolume(value);
+  };
 
   const handleProgressChange = (value: number) => {
-
-    if (!audioRef.current.src) return
-    onPause()
-    setProgress(value)
-    audioRef.current.currentTime = value
-    onPlay()
-
-  }
-
-
+    if (!audioRef.current.src) return;
+    onPause();
+    setProgress(value);
+    audioRef.current.currentTime = value;
+    onPlay();
+  };
 
   const onPlay = () => {
     if (!audioRef.current.src) {
@@ -152,12 +160,13 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     }
 
     if (audioRef.current?.volume === 0) {
-      audioRef.current.volume = 1
-      setVolume(1)
+      audioRef.current.volume = toggleMuteVolume.current
+      player.setVolume(toggleMuteVolume.current)
     }
     else if (audioRef.current?.volume !== 0) {
-      audioRef.current.volume = 0
-      setVolume(0)
+      toggleMuteVolume.current = audioRef.current.volume
+      audioRef.current.volume = 0 
+      player.setVolume(0)
     }
 
   }
@@ -217,8 +226,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 
 
 
-
-
+  
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 h-full">
@@ -273,7 +281,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             "
       >
         <div className="flex justify-center items-center gap-x-6 ">
-
           <AiFillStepBackward
             onClick={onPlayPrevious}
             size={20}
@@ -312,15 +319,15 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
           />
         </div>
         <div className=" w-full flex items-center gap-1">
-        {calculateTime(progress)}
+          {calculateTime(progress)}
           <ProgessSlider
             value={progress}
             duration={duration}
-            onChange={(value) => { handleProgressChange(value) }}
-
+            onChange={(value) => {
+              handleProgressChange(value);
+            }}
           />
-           {calculateTime(duration)}
-
+          {calculateTime(duration)}
         </div>
       </div>
       <div className="hidden md:flex w-full justify-end pr-2">
@@ -331,18 +338,15 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             size={34}
           />
           <VolumeSlider
-            value={volume}
+            value={player.volume}
             onChange={(value) => {
-              handleVolumeChange(value)
+              handleVolumeChange(value);
             }}
           />
         </div>
       </div>
-
     </div>
   );
-}
+};
 
 export default PlayerContent;
-
-

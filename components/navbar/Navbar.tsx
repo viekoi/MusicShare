@@ -1,12 +1,13 @@
 "use client";
-import React,{useCallback} from "react";
-import { AiOutlineSearch } from 'react-icons/ai'
+import React from "react";
+import { AiOutlineSearch,AiOutlinePlus } from 'react-icons/ai'
 
 
 
 import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
 import useSearchModal from "@/hooks/useSearchModal";
+import useUploadModal from "@/hooks/useUploadModal";
 import Button from "../Button";
 import Dropdown from '../Dropdown'
 
@@ -16,6 +17,7 @@ import Dropdown from '../Dropdown'
 const Navbar = () => {
   const authModal = useAuthModal();
   const searchModal = useSearchModal()
+  const uploadModal = useUploadModal()
   const { user,isLoading } = useUser()
 
   if(isLoading) {
@@ -35,6 +37,9 @@ const Navbar = () => {
                 </div>
 
                 <div className=" flex gap-2 items-center justify-self-center ">
+                  <Button onClick={uploadModal.onOpen}>
+                    <AiOutlinePlus size={20} className="text-gray-400" />
+                  </Button>
                   <Button onClick={searchModal.onOpen}>
                     <AiOutlineSearch size={20} className="text-gray-400" />
                   </Button>

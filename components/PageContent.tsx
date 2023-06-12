@@ -2,11 +2,11 @@
 import React from 'react'
 import { MdShuffle } from 'react-icons/md'
 import { BiRepeat } from 'react-icons/bi'
-import { IoVolumeMedium } from 'react-icons/io5'
 import { Song } from '@/types'
 import SongItem from '@/components/SongItem'
 import useOnPlay from "@/hooks/useOnPlay";
 import usePlayer from '@/hooks/usePlayer'
+import Button from './Button'
 
 interface PageContentProps{
     songs:Song[] 
@@ -19,9 +19,12 @@ const PageContent:React.FC<PageContentProps> = ({songs}) => {
   return (
     <div className="list xl:gap-0 lg:gap-1 md:gap-2 gap-3 overflow-hidden">
       <div className=" flex items-center gap-2 mb-5 pl-1">
-        <BiRepeat size={20} className='text-gray-400' />
-        <MdShuffle size={20} className='text-gray-400' />
-        <IoVolumeMedium size={20} className='text-gray-400' />
+        <Button onClick={()=>{player.setIsRepeated(player.isRepeated)}}>
+          <BiRepeat size={20} className={player.isRepeated ?`text-[#22c55e]`:`text-gray-400`} />
+        </Button>
+        <Button onClick={()=>{player.setIsRandom(player.isRandom)}}>
+         <MdShuffle size={20}className={player.isRandom ?`text-[#22c55e]`:`text-gray-400`}  />
+        </Button>
       </div>
       {songs.map((song) => {
         return (
