@@ -3,14 +3,10 @@
 import React, {useCallback} from 'react'
 import useLoadImage from '@/hooks/useLoadImage'
 import LikeButton from './LikeButton';
+import { Song } from '@/types';
 
 interface SongItemProps{
-  id:string,
-  userId:string,
-  author:string,
-  title: string;
-  songPath: string;
-  imagePath: string;
+  data:Song
   active?:boolean
   onClick:(id:string)=>void
 }
@@ -19,10 +15,10 @@ interface SongItemProps{
 
 
 
-const SongItem:React.FC<SongItemProps> = ({id,userId,author,title,songPath,imagePath:path,onClick,active}) => {
+const SongItem:React.FC<SongItemProps> = ({data,onClick,active}) => {
 
-
-  const imagePath = useLoadImage(path);
+  console.log(data)
+  const imagePath = useLoadImage(data.image_path);
   
   const divEleRef = useCallback(
     (divEle:HTMLDivElement) => {
@@ -44,7 +40,7 @@ const SongItem:React.FC<SongItemProps> = ({id,userId,author,title,songPath,image
 
   const handleClick: React.MouseEventHandler<HTMLDivElement> | undefined=()=>{
     if(onClick){
-      return onClick(id)
+      return onClick(data.id)
     }
   }
 
@@ -55,8 +51,8 @@ const SongItem:React.FC<SongItemProps> = ({id,userId,author,title,songPath,image
 
   return (
     <div className={`songItem group ${active && 'active'}`} ref={divEleRef} onClick={handleClick}>
-      <span className='lg:text-[40px] md:text-[30px] text-[15px]'>{`${title} - ${author} `}
-      <LikeButton className=' hidden group-hover:block' songId={id}/>
+      <span className='lg:text-[40px] md:text-[30px] text-[15px]'>{`${data.title} - ${data.author} `}
+      {/* <LikeButton className=' hidden group-hover:block' songId={data.id} /> */}
       </span>
       {imagePath &&  <img  src={imagePath} alt="image" /> }
      

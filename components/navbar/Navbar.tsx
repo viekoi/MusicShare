@@ -2,12 +2,14 @@
 import React from "react";
 import { AiOutlineSearch, AiOutlinePlus } from "react-icons/ai";
 import { BiLeftArrow } from "react-icons/bi";
+import { IoTrashBin } from 'react-icons/io5'
 import { useRouter, usePathname } from "next/navigation";
 
 import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
 import useSearchModal from "@/hooks/useSearchModal";
 import useUploadModal from "@/hooks/useUploadModal";
+import useDeleteModal from "@/hooks/useDeleteModal";
 import Button from "../Button";
 import Dropdown from "../Dropdown";
 
@@ -15,9 +17,11 @@ const Navbar = () => {
   const router = useRouter();
   const pathName = usePathname();
 
+
   const authModal = useAuthModal();
   const searchModal = useSearchModal();
   const uploadModal = useUploadModal();
+  const deleteModal = useDeleteModal()
   const { user, isLoading } = useUser();
 
   if (isLoading) {
@@ -29,12 +33,12 @@ const Navbar = () => {
       {user ? (
         <>
           <div className="w-full z-[50]">
-            <div className=" mx-auto max-w-[1280px] px-4">
+            <div className=" navbar px-4">
               <div className="flex justify-between  h-[80px] items-center gap-2">
                 <div className=" flex gap-2 items-center  ">
                   {pathName !== "/" && (
                     <Button onClick={router.back} className="flex gap-1 items-center">
-                      <BiLeftArrow size={20} className="text-gray-400"/> <span className="md:text-[16px] text-[12px] text-gray-400">Trở về</span>
+                      <BiLeftArrow size={20} className="text-gray-400" /> <span className="md:text-[16px] text-[12px] text-gray-400">Trở về</span>
                     </Button>
                   )}
                 </div>
@@ -43,6 +47,10 @@ const Navbar = () => {
                   <Button onClick={uploadModal.onOpen}>
                     <AiOutlinePlus size={20} className="text-gray-400" />
                   </Button>
+                  {pathName.includes('/uploaded') && <Button onClick={deleteModal.onOpen}>
+                    <IoTrashBin size={20} className="text-gray-400" />
+                  </Button>}
+
                   <Button onClick={searchModal.onOpen}>
                     <AiOutlineSearch size={20} className="text-gray-400" />
                   </Button>
@@ -54,7 +62,7 @@ const Navbar = () => {
         </>
       ) : (
         <div className="fixed w-full top-0 bg-slate-600 z-[50]">
-          <div className=" mx-auto max-w-[1280px] px-4">
+          <div className=" navbar px-4">
             <div className="flex sm:flex-row flex-col items-center justify-center sm:justify-between gap-1 sm:gap-0  w-full h-[80px]">
               <h1 className="sm:text-[30px] font-bold text-[15px] ">
                 Chào mừng đến với Music share

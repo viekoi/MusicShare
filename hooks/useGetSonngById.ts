@@ -9,14 +9,10 @@ const useGetSongById = (id?: string) => {
   const [song, setSong] = useState<Song | undefined>(undefined);
   const { supabaseClient } = useSessionContext();
 
-  useEffect(() => {
-    if (!id) {
-      return;
-    }
 
-    setIsLoading(true);
+ 
 
-    const fetchSong = async () => {
+  const fetchSong = async () => {
       const { data, error } = await supabaseClient
         .from('songs')
         .select('*')
@@ -31,9 +27,18 @@ const useGetSongById = (id?: string) => {
       setSong(data as Song);
       setIsLoading(false);
     }
+  
 
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+    setIsLoading(true);
     fetchSong();
   }, [id, supabaseClient]);
+
+
+
 
   return useMemo(() => ({
     isLoading,
