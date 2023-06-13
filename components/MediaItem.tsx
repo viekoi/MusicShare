@@ -6,12 +6,12 @@ import useLoadImage from "@/hooks/useLoadImage";
 import { Song } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
 
-interface SearchItemProps {
+interface MediaItemProps {
   data: Song;
   onClick?: (id: string) => void;
 }
 
-const SearchItem: React.FC<SearchItemProps> = ({
+const MediaItem: React.FC<MediaItemProps> = ({
   data,
   onClick,
 }) => {
@@ -28,6 +28,7 @@ const SearchItem: React.FC<SearchItemProps> = ({
 
   return ( 
     <div
+      id="media-item"
       onClick={handleClick}
       className="
         flex 
@@ -68,4 +69,4 @@ const SearchItem: React.FC<SearchItemProps> = ({
   );
 }
  
-export default SearchItem;
+export default MediaItem;

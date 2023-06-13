@@ -10,20 +10,20 @@ import useSearchModal from "@/hooks/useSearchModal";
 import useDebounce from "@/hooks/useDebounce";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import MediaItem from "../SearchItem";
+import MediaItem from "../MediaItem";
 
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import useGetSongsByTitle from "@/hooks/useGetSongsByTitle";
 
 const SearchModal = () => {
- 
+
   const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState<string>("");
   const debouncedValue = useDebounce<string>(value, 500);
-  const {songs} = useGetSongsByTitle(debouncedValue);
+  const { songs } = useGetSongsByTitle(debouncedValue);
 
 
-  
+
 
 
   const searchModal = useSearchModal();
@@ -31,7 +31,7 @@ const SearchModal = () => {
 
   const { register, handleSubmit, reset } = useForm<FieldValues>({
     defaultValues: {
-      title:"",
+      title: "",
     },
   });
 
@@ -43,19 +43,19 @@ const SearchModal = () => {
   };
 
 
-  const handleClickSong = (song:Song)=>{
+  const handleClickSong = (song: Song) => {
     setIsLoading(true);
     router.push(`search/${song.id}`)
     searchModal.onClose()
     setValue("")
     setIsLoading(false);
-      reset();
+    reset();
   }
 
 
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
-   
+
     try {
       setIsLoading(true);
 
@@ -102,7 +102,7 @@ const SearchModal = () => {
       {
         <div className="mt-2">
           {songs.map((song) => {
-            return <MediaItem key={song.id} data={song} onClick={()=>{
+            return <MediaItem  key={song.id} data={song} onClick={() => {
               handleClickSong(song)
             }} />;
           })}

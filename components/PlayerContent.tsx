@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef} from "react";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
@@ -9,9 +9,10 @@ import { Song } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
 
 import LikeButton from "./LikeButton";
-import SearchItem from "./SearchItem";
+import MediaItem from "./MediaItem";
 import VolumeSlider from "./VolumeSlider";
 import ProgessSlider from "./ProgessSlider";
+
 
 interface PlayerContentProps {
   song: Song;
@@ -24,14 +25,16 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const [progress, setProgress] = useState(0);
 
   const toggleMuteVolume = useRef<number>(player.volume);
-
   const audioRef = useRef<HTMLAudioElement>(new Audio(songUrl));
+  const intervalRef = useRef<NodeJS.Timer>();
+  
 
   audioRef.current.volume = player.volume;
 
-  const intervalRef = useRef<NodeJS.Timer>();
 
   const { duration } = audioRef.current;
+
+  
 
   const calculateTime = (duration: number) => {
     if (!duration) return <span className="text-[10px]">00:00</span>;
@@ -175,41 +178,43 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     onPause();
     clearInterval(intervalRef.current);
   };
-    audioRef.current.onended = () => {
-    if(player.isRepeated){
+
+  audioRef.current.onended = () => {
+    if (player.isRepeated) {
       return
     }
     onPlayNext();
   };
 
   useEffect(() => {
-    
-
     audioRef.current.play();
 
     return () => {
-      console.log('song ended')
       audioRef.current.pause();
     };
-  }, [audioRef.current.src,audioRef.current.ended]);
+  }, [audioRef.current.ended]);
+
+
+ 
+  
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 h-full">
-      <div className="flex w-full justify-start">
-        <div className="flex items-center gap-x-4">
-          <SearchItem data={song} />
-          <LikeButton songId={song.id} />
+    <div className="grid grid-cols-3 h-full" >
+      <div className="flex w-full items-center gap-1 justify-start col-span-2 md:col-span-1">
+        <div className="overflow-hidden">
+          <MediaItem data={song} />
         </div>
+          <LikeButton songId={song.id} />
       </div>
 
       <div
         className="
             flex 
             md:hidden 
-            col-auto 
             w-full 
             justify-end 
             items-center
+            col-span-1
           "
       >
         <div
@@ -241,6 +246,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
               w-full 
               gap-3
               max-w-[722px]
+              col-span-1
              
              
             "
@@ -295,7 +301,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           {calculateTime(duration)}
         </div>
       </div>
-      <div className="hidden md:flex w-full justify-end pr-2">
+      <div className="hidden col-span-1 md:flex w-full justify-end pr-2">
         <div className="flex items-center gap-x-2 w-[120px]">
           <VolumeIcon
             onClick={toggleMute}

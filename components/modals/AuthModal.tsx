@@ -7,7 +7,7 @@ import {
   useSessionContext, 
   useSupabaseClient
 } from '@supabase/auth-helpers-react';
-import { useRouter } from 'next/navigation';
+
 
 import useAuthModal from "@/hooks/useAuthModal";
 
