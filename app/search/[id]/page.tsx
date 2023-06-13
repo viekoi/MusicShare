@@ -1,6 +1,6 @@
 
 
-import { Song } from '@/types'
+
 import getSongById from '@/actions/server/getSongById'
 import PageContent from '@/components/PageContent'
 

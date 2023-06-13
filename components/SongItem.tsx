@@ -54,8 +54,8 @@ const SongItem:React.FC<SongItemProps> = ({id,userId,author,title,songPath,image
   
 
   return (
-    <div className={`songItem group`} ref={divEleRef} onClick={handleClick}>
-      <span className=' xl:text-[50px] lg:text-[40px] md:text-[30px]  text-[15px]'>{`${title} - ${author} `}
+    <div className={`songItem group ${active && 'active'}`} ref={divEleRef} onClick={handleClick}>
+      <span className='lg:text-[40px] md:text-[30px] text-[15px]'>{`${title} - ${author} `}
       <LikeButton className=' hidden group-hover:block' songId={id}/>
       </span>
       {imagePath &&  <img  src={imagePath} alt="image" /> }

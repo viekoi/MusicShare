@@ -13,12 +13,16 @@ body {
 .list {
   display: flex;
   flex-direction: column;
-  margin-top: 5vh;
-  padding: clamp(1rem, 5vw, 6rem);
+  margin-top: 80px;
+  /* padding: clamp(1rem, 5vw, 6rem); */
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1280px;
   margin-bottom: 80px;
+  padding: 0 16px;
 }
 
-.list > .songItem {
+.list .songItem {
   color: rgba(255, 255, 255, 0.25);
   font-weight: 300;
   text-decoration: none;
@@ -26,11 +30,24 @@ body {
   cursor: pointer;
 }
 
-.list > .songItem:hover {
+.list .songItem {
+  color: rgba(255, 255, 255, 0.25);
+  font-weight: 300;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
+}
+
+
+.list .songItem:hover {
   color: white;
 }
 
-.list > .songItem > span {
+.list .songItem.active {
+  color: white;
+}
+
+.list .songItem > span {
   display: flex;
   border-bottom: 1px solid transparent;
   border-top: 1px solid transparent;
@@ -40,12 +57,13 @@ body {
   gap: 8px;
 }
 
-.list > .songItem:hover > span {
+.list .songItem:hover > span {
   border-top-color: white;
   border-bottom-color: white;
 }
 
-.list > .songItem > img {
+
+.list .songItem > img {
   position: absolute;
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.5);
@@ -54,7 +72,7 @@ body {
   max-width: 200px;
 }
 
-.list > .songItem:hover > img {
+.list .songItem:hover > img {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
 }

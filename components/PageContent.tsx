@@ -17,8 +17,8 @@ const PageContent:React.FC<PageContentProps> = ({songs}) => {
     const onPlay = useOnPlay(songs);
     const player = usePlayer()
   return (
-    <div className="list xl:gap-0 lg:gap-1 md:gap-2 gap-3 overflow-hidden">
-      <div className=" flex items-center gap-2 mb-5 pl-1">
+    <div className="list xl:gap-0  md:gap-2 gap-3 overflow-hidden">
+      <div className=" flex items-center gap-2 mt-5 mb-1">
         <Button onClick={()=>{player.setIsRepeated(player.isRepeated)}}>
           <BiRepeat size={20} className={player.isRepeated ?`text-[#22c55e]`:`text-gray-400`} />
         </Button>

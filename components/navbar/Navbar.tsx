@@ -1,28 +1,27 @@
 "use client";
 import React from "react";
-import { AiOutlineSearch,AiOutlinePlus } from 'react-icons/ai'
-
-
+import { AiOutlineSearch, AiOutlinePlus } from "react-icons/ai";
+import { BiLeftArrow } from "react-icons/bi";
+import { useRouter, usePathname } from "next/navigation";
 
 import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
 import useSearchModal from "@/hooks/useSearchModal";
 import useUploadModal from "@/hooks/useUploadModal";
 import Button from "../Button";
-import Dropdown from '../Dropdown'
-
-
-
+import Dropdown from "../Dropdown";
 
 const Navbar = () => {
-  const authModal = useAuthModal();
-  const searchModal = useSearchModal()
-  const uploadModal = useUploadModal()
-  const { user,isLoading } = useUser()
+  const router = useRouter();
+  const pathName = usePathname();
 
-  if(isLoading) {
-    return <div className="h-[80px]">
-    </div>
+  const authModal = useAuthModal();
+  const searchModal = useSearchModal();
+  const uploadModal = useUploadModal();
+  const { user, isLoading } = useUser();
+
+  if (isLoading) {
+    return <div className="h-[80px]"></div>;
   }
 
   return (
@@ -30,13 +29,17 @@ const Navbar = () => {
       {user ? (
         <>
           <div className="w-full z-[50]">
-            <div className=" mx-auto max-w-[1280px] px-2">
+            <div className=" mx-auto max-w-[1280px] px-4">
               <div className="flex justify-between  h-[80px] items-center gap-2">
-                <div className=" flex gap-2 items-center justify-self-center ">
-                 
+                <div className=" flex gap-2 items-center  ">
+                  {pathName !== "/" && (
+                    <Button onClick={router.back} className="flex gap-1 items-center">
+                      <BiLeftArrow size={20} className="text-gray-400"/> <span className="md:text-[16px] text-[12px] text-gray-400">Trở về</span>
+                    </Button>
+                  )}
                 </div>
 
-                <div className=" flex gap-2 items-center justify-self-center ">
+                <div className=" flex gap-2 items-center  ">
                   <Button onClick={uploadModal.onOpen}>
                     <AiOutlinePlus size={20} className="text-gray-400" />
                   </Button>
@@ -45,15 +48,13 @@ const Navbar = () => {
                   </Button>
                   <Dropdown />
                 </div>
-
-
               </div>
             </div>
           </div>
         </>
       ) : (
         <div className="fixed w-full top-0 bg-slate-600 z-[50]">
-          <div className=" mx-auto max-w-[1280px] px-2">
+          <div className=" mx-auto max-w-[1280px] px-4">
             <div className="flex sm:flex-row flex-col items-center justify-center sm:justify-between gap-1 sm:gap-0  w-full h-[80px]">
               <h1 className="sm:text-[30px] font-bold text-[15px] ">
                 Chào mừng đến với Music share
