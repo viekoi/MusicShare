@@ -13,8 +13,8 @@ import useGetSongsByUserId from '@/hooks/useGetSongsByUserId'
 
 const DeleteModal = () => {
   const deleteModal = useDeleteModal()
-  const {songs} = useGetSongsByUserId()
-  const { supabaseClient } = useSessionContext();
+  const { supabaseClient,session} = useSessionContext();
+  const {songs} = useGetSongsByUserId(session?.user.id)
   const router = useRouter()
   
 

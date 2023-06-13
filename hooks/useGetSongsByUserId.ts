@@ -4,20 +4,23 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { Song } from "@/types";
 
 
-const useGetSongsByUserId = () => {
+const useGetSongsByUserId = (id?:string) => {
   const [isLoading, setIsLoading] = useState(false);
   const [songs, setSongs] = useState<Song[]>([]);
-  const { supabaseClient,session } = useSessionContext();
+  const { supabaseClient} = useSessionContext();
 
 
  
 
 
   const fetchSong = async ()=> {
+    if(!id){
+      return
+    }
     const { data, error } = await  supabaseClient
     .from('songs')
     .select('*')
-    .eq('user_id', session?.user.id)
+    .eq('user_id',id)
     .order('created_at', { ascending: false })
 
 
@@ -36,7 +39,7 @@ const useGetSongsByUserId = () => {
 
     setIsLoading(true);
     fetchSong();
-  }, [supabaseClient]);
+  }, [supabaseClient,id]);
 
   return useMemo(() => ({
     isLoading,
