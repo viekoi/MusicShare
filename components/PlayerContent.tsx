@@ -23,11 +23,15 @@ interface PlayerContentProps {
 const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const player = usePlayer();
   const [isPlaying, setIsPlaying] = useState(false);
+
   const [progress, setProgress] = useState(0);
 
   const toggleMuteVolume = useRef<number>(player.volume);
 
   const audioRef = useRef<HTMLAudioElement>(new Audio(songUrl));
+
+
+  
 
   const intervalRef = useRef<NodeJS.Timer>();
   const mobilePlayerModal = useMobilePlayerModal();
@@ -182,19 +186,30 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   };
 
   audioRef.current.onended = () => {
+    console.log('1')
+    audioRef.current.pause()
+   
     if (player.isRepeated) {
-      return;
+      console.log('2')
+      audioRef.current.play()
+      onPlay()
+      return
     }
+    console.log('3')
     onPlayNext();
   };
 
   useEffect(() => {
+    console.log('5')
     audioRef.current.play();
 
     return () => {
+      console.log('4')
       audioRef.current.pause();
+      
     };
-  }, [audioRef.current.ended]);
+   
+  }, [audioRef.current]);
 
   return (
     <>
