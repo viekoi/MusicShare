@@ -304,10 +304,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
       </div>
 
       <div
-        className="grid grid-cols-2 h-full md:hidden"
+        className="grid grid-cols-3 h-full md:hidden"
         onClick={mobilePlayerModal.onOpen}
       >
-        <div className="flex w-full items-center gap-1 justify-start col-span-1 ">
+        <div className="flex w-full items-center gap-1 justify-start col-span-2 ">
           <div className="overflow-hidden flex-1">
             <MediaItem data={song} />
           </div>
