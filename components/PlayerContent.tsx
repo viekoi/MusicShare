@@ -308,7 +308,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
         onClick={mobilePlayerModal.onOpen}
       >
         <div className="flex w-full items-center gap-1 justify-start col-span-1 ">
-          <div className="overflow-hidden">
+          <div className="overflow-hidden flex-1">
             <MediaItem data={song} />
           </div>
           <LikeButton songId={song.id} />
