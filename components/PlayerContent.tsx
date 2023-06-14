@@ -212,14 +212,14 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
               justify-start 
               items-center 
               w-full 
-              gap-3
+              gap-2
               max-w-[722px]
               col-span-1
              
              
             "
         >
-          <div className="flex justify-center items-center gap-x-6 ">
+          <div className="flex justify-center items-center gap-6">
             <AiFillStepBackward
               onClick={onPlayPrevious}
               size={20}
@@ -327,7 +327,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
       <MobilePlayerModal
         playIcon={Icon}
         calculateTime={calculateTime}
-        audio={audioRef.current}
         song={song}
         handleProgressChange={handleProgressChange}
         duration={duration}

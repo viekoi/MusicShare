@@ -47,7 +47,7 @@ const ProgessSlider: React.FC<ProgessSlideProps > = ({
           relative 
           grow 
           rounded-full 
-          h-[5px]
+          h-[8px]
           cursor-pointer
         "
       >

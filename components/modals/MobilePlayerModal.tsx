@@ -11,7 +11,6 @@ import useLoadImage from "@/hooks/useLoadImage";
 
 
 interface MobilePlayerModalProps {
-  audio: HTMLAudioElement;
   song: Song;
   progress: number;
   duration: number;
@@ -24,7 +23,7 @@ interface MobilePlayerModalProps {
 }
 
 const MobilePlayerModal: React.FC<MobilePlayerModalProps> = ({
-  audio,
+
   song,
   duration,
   progress,
@@ -103,7 +102,7 @@ const MobilePlayerModal: React.FC<MobilePlayerModalProps> = ({
           </Dialog.Description>
 
           <div className="flex flex-col items-center flex-1 justify-between">
-            <div className=" w-full h-[60vh] flex flex-row items-center justify-center">
+            <div className=" w-full h-[60vh] object-cover flex flex-row items-center justify-center">
               {imgPath && (
                <img src={imgPath} className=" max-w-[100vw] max-h-[60vh]" alt="image" />
               )}
