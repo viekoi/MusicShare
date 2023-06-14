@@ -16,8 +16,6 @@ interface SongItemProps{
 
 
 const SongItem:React.FC<SongItemProps> = ({data,onClick,active}) => {
-
-  console.log(data)
   const imagePath = useLoadImage(data.image_path);
   
   const divEleRef = useCallback(

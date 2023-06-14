@@ -13,6 +13,7 @@ import MediaItem from "./MediaItem";
 import VolumeSlider from "./VolumeSlider";
 import ProgessSlider from "./ProgessSlider";
 import useMobilePlayerModal from "@/hooks/useMobilePlayerModal";
+import MobilePlayerModal from "./modals/MobilePlayerModal";
 
 interface PlayerContentProps {
   song: Song;
@@ -25,9 +26,11 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const [progress, setProgress] = useState(0);
 
   const toggleMuteVolume = useRef<number>(player.volume);
+
   const audioRef = useRef<HTMLAudioElement>(new Audio(songUrl));
+
   const intervalRef = useRef<NodeJS.Timer>();
-  const mobilePlayerModal = useMobilePlayerModal()
+  const mobilePlayerModal = useMobilePlayerModal();
 
   audioRef.current.volume = player.volume;
 
@@ -283,7 +286,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 h-full md:hidden" onClick={mobilePlayerModal.onOpen}>
+      <div
+        className="grid grid-cols-2 h-full md:hidden"
+        onClick={mobilePlayerModal.onOpen}
+      >
         <div className="flex w-full items-center gap-1 justify-start col-span-1 ">
           <div className="overflow-hidden">
             <MediaItem data={song} />
@@ -318,6 +324,18 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           </div>
         </div>
       </div>
+      <MobilePlayerModal
+        playIcon={Icon}
+        calculateTime={calculateTime}
+        audio={audioRef.current}
+        song={song}
+        handleProgressChange={handleProgressChange}
+        duration={duration}
+        progress={progress}
+        onPlayNext={onPlayNext}
+        onPlayPrevious={onPlayPrevious}
+        handlePlay={handlePlay}
+      />
     </>
   );
 };

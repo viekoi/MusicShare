@@ -28,8 +28,15 @@ const DeleteModal = () => {
     }
   };
 
- 
-  const handleDelete = async (id:string)=>{
+ const handleDelete= (id:string)=>{
+   var confirm = window.confirm("Xác nhận xóa")
+   if(confirm){
+      deleteSong(id)
+   }else{
+    return
+   }
+ }
+  const deleteSong = async (id:string)=>{
     console.log(id)
     const {error} = await supabaseClient
     .from('songs')

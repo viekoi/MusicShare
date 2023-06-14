@@ -69,10 +69,10 @@ const SearchModal = () => {
         query,
       });
 
-      router.push(url);
       setValue("")
       setIsLoading(false);
       reset();
+      router.push(url);
       searchModal.onClose();
     } catch (error) {
       toast.error("Đã có lỗi");

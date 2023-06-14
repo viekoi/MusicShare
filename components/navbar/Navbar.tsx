@@ -37,7 +37,7 @@ const Navbar = () => {
               <div className="flex justify-between  h-[80px] items-center gap-2">
                 <div className=" flex gap-2 items-center  ">
                   {pathName !== "/" && (
-                    <Button onClick={router.back} className="flex gap-1 items-center">
+                    <Button onClick={()=>router.push('/')} className="flex gap-1 items-center">
                       <BiLeftArrow size={20} className="text-gray-400" /> <span className="md:text-[16px] text-[12px] text-gray-400">Trở về</span>
                     </Button>
                   )}

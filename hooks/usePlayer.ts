@@ -13,6 +13,8 @@ interface PlayerStore {
   setIsRandom:(isRandom:boolean)=>void;
   setIsRepeated:(isRepeated:boolean)=>void;
 
+
+
 }
 
 const usePlayer = create<PlayerStore>((set) => ({
@@ -27,6 +29,8 @@ const usePlayer = create<PlayerStore>((set) => ({
   setVolume: (volume:number) => set({ volume:volume }),
   setIsRandom:(isRandom:boolean)=>set({isRandom:!isRandom}),
   setIsRepeated:(isRepeated:boolean)=>set({isRepeated:!isRepeated})
-}));
+  
+}
+));
 
 export default usePlayer;
