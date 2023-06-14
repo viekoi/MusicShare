@@ -17,7 +17,7 @@ interface MobilePlayerModalProps {
   handleProgressChange: (value: number) => void;
   calculateTime: (duration: number) => JSX.Element;
   onPlayPrevious: () => void;
-  handlePlay: () => void;
+  handlePlay: (e:any) => void;
   onPlayNext: () => void;
   playIcon: any;
 }

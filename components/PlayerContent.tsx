@@ -124,6 +124,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   };
 
   const onPlay = () => {
+
     if (!audioRef.current.src) {
       return;
     }
@@ -138,7 +139,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     setIsPlaying(false);
   };
 
-  const handlePlay = () => {
+  const handlePlay = (e:any) => {
+    e.stopPropagation()
     if (!isPlaying) {
       audioRef.current.play();
     } else {
