@@ -30,7 +30,7 @@ const Modal: React.FC<ModalProps> = ({
         />
         <Dialog.Content
           className="
-            overflow-y-scroll
+            overflow-y-auto
             fixed 
             drop-shadow-md 
             border 
