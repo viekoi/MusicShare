@@ -10,8 +10,6 @@ const useGetSongById = (id?: string) => {
   const { supabaseClient } = useSessionContext();
 
 
- 
-
   const fetchSong = async () => {
       const { data, error } = await supabaseClient
         .from('songs')

@@ -6,6 +6,7 @@ import UserProvider from "@/providers/UserProvider";
 import ModalProvider from "@/providers/ModalProvider";
 import Navbar from "@/components/navbar/Navbar";
 import Player from "@/components/Player";
+import QueryProvider from "@/providers/QueryProvider";
 
 const poppins = Poppins({ subsets: ["latin"], weight: "400" });
 
@@ -22,15 +23,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <SupabaseProvider>
-          <UserProvider>
-            <ToasterProvider />
-            <ModalProvider />
-            <Navbar />
-            {children}
-            <Player />
-          </UserProvider>
-        </SupabaseProvider>
+        <QueryProvider>
+          <SupabaseProvider>
+            <UserProvider>
+              <ToasterProvider />
+              <ModalProvider />
+              <Navbar />
+              {children}
+              <Player />
+            </UserProvider>
+          </SupabaseProvider>
+        </QueryProvider>
       </body>
     </html>
   );

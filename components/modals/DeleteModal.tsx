@@ -37,7 +37,6 @@ const DeleteModal = () => {
    }
  }
   const deleteSong = async (id:string)=>{
-    console.log(id)
     const {error} = await supabaseClient
     .from('songs')
     .delete()

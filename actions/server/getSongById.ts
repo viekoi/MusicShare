@@ -5,7 +5,10 @@ import { Song } from "@/types";
 const getSongById = async (id: string): Promise<Song[]> => {
   const supabase = SupaServer();
 
-  const { data, error } = await supabase.from("songs").select("*").eq("id", id);
+  const { data, error } = await supabase
+    .from("songs")
+    .select("*")
+    .eq("id", id);
 
   if (error) {
     console.log(error.message);
