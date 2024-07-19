@@ -1,51 +1,55 @@
-"use client";
-
-import React, { useCallback } from "react";
+import React, { useCallback, useRef, useEffect } from "react";
 import useLoadImage from "@/hooks/useLoadImage";
 import { Song } from "@/types";
-import LikeButton from "./LikeButton";
+import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
 
 interface SongItemProps {
   data: Song;
   active?: boolean;
-  onClick: (id: string) => void;
+  onClick: () => void;
+  className?: string;
 }
 
-const SongItem: React.FC<SongItemProps> = ({ data, onClick, active }) => {
+const SongItem: React.FC<SongItemProps> = ({
+  data,
+  onClick,
+  active,
+  className,
+}) => {
   const imagePath = useLoadImage(data.image_path);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const divEleRef = useCallback((divEle: HTMLDivElement) => {
-    if (divEle === null) return;
+  useEffect(() => {
+    const button = buttonRef.current;
+    if (!button) return;
 
-    divEle.onmousemove = (e: MouseEvent) => {
-      const rect = divEle.getBoundingClientRect(),
-        img = divEle.querySelector("img");
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = button.getBoundingClientRect();
+      const img = button.querySelector("img");
       if (img === null) return;
       img.style.left = `${e.clientX - rect.left}px`;
       img.style.top = `${e.clientY - rect.top}px`;
     };
+
+    button.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      button.removeEventListener("mousemove", handleMouseMove);
+    };
   }, []);
 
-  const handleClick:
-    | React.MouseEventHandler<HTMLDivElement>
-    | undefined = () => {
-    if (onClick) {
-      return onClick(data.id);
-    }
-  };
-
   return (
-    <div
-      className={`songItem group ${active && "active"}`}
-      ref={divEleRef}
-      onClick={handleClick}
+    <button
+      className={cn(`songItem group w-full`, active && "active", className)}
+      ref={buttonRef}
+      onClick={onClick}
     >
       <span className="lg:text-[40px] md:text-[30px] text-[15px]">
         {`${data.title} - ${data.author}`}
-        <LikeButton className="hidden group-hover:block" songId={data.id} />
       </span>
       {imagePath && <img src={imagePath} alt="image" />}
-    </div>
+    </button>
   );
 };
 

@@ -1,106 +1,99 @@
-import * as Dialog from '@radix-ui/react-dialog';
-import { IoMdClose } from 'react-icons/io';
+"use client";
+
+import React from "react";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface ModalProps {
+  title?: string;
+  description?: string;
   isOpen: boolean;
-  onChange: (open: boolean) => void;
-  title: string;
-  description: string;
-  children: React.ReactNode;
+  onClose: () => void;
+  children?: React.ReactNode;
+  className?: string;
 }
+import { cn } from "@/lib/utils";
 
 const Modal: React.FC<ModalProps> = ({
   isOpen,
-  onChange,
   title,
   description,
-  children
+  children,
+  onClose,
+  className,
 }) => {
-  return ( 
-    <Dialog.Root open={isOpen} defaultOpen={isOpen} onOpenChange={onChange}>
-      <Dialog.Portal>
-        <Dialog.Overlay 
-          className="
-            bg-neutral-900/90 
-            backdrop-blur-sm 
-            fixed 
-            inset-0
-            z-50
-          " 
-        />
-        <Dialog.Content
-          className="
-            overflow-y-auto
-            fixed 
-            drop-shadow-md 
-            border 
-            border-neutral-700 
-            top-[50%] 
-            left-[50%] 
-            max-h-full 
-            h-full 
-            md:h-auto 
-            md:max-h-[85vh] 
-            w-full 
-            md:w-[90vw] 
-            md:max-w-[450px] 
-            translate-x-[-50%] 
-            translate-y-[-50%] 
-            rounded-md 
-            bg-neutral-800 
-            p-[25px] 
-            focus:outline-none
-            z-50
-          ">
-          <Dialog.Title 
+  const onChange = (open: boolean) => {
+    if (!open) {
+      onClose();
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} defaultOpen={isOpen} onOpenChange={onChange}>
+      <DialogContent
+        className={cn(
+          `
+        overflow-y-auto
+        fixed 
+        border 
+        top-[50%] 
+        left-[50%] 
+        max-h-full 
+        h-full 
+        md:h-auto 
+        md:max-h-[85vh] 
+        w-full 
+        md:w-[90vw] 
+        md:max-w-[450px] 
+        translate-x-[-50%]
+        translate-y-[-50%]
+        rounded-md 
+        p-[25px] 
+        focus:outline-none
+        z-50
+        `,
+          className
+        )}
+      >
+        {title && (
+          <DialogTitle
             className="
               text-xl 
               text-center 
               font-bold 
-              mb-4
-            "
+              pb-4
+              border-b-[1px]
+              border-solid
+              "
           >
             {title}
-          </Dialog.Title>
-          <Dialog.Description 
+          </DialogTitle>
+        )}
+        {description && (
+          <DialogDescription
             className="
-              mb-5 
-              text-sm 
-              leading-normal 
-              text-center
-            "
+        mb-5 
+        text-sm 
+        leading-normal 
+        text-center
+      "
           >
             {description}
-          </Dialog.Description>
-          <div>
-            {children}
-          </div>
-          <Dialog.Close asChild>
-            <button
-              className="
-                text-neutral-400 
-                hover:text-white 
-                absolute 
-                top-[10px] 
-                right-[10px] 
-                inline-flex 
-                h-[25px] 
-                w-[25px] 
-                appearance-none 
-                items-center 
-                justify-center 
-                rounded-full 
-                focus:outline-none
-              "
-              aria-label="Close"
-            >
-              <IoMdClose />
-            </button>
-          </Dialog.Close>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+          </DialogDescription>
+        )}
+
+        {children}
+      </DialogContent>
+    </Dialog>
   );
-}
- 
+};
+
 export default Modal;

@@ -1,30 +1,25 @@
 "use client";
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import qs from "query-string";
 import { toast } from "react-hot-toast";
 import { Song } from "@/types";
 
-
 import useSearchModal from "@/hooks/useSearchModal";
 import useDebounce from "@/hooks/useDebounce";
-import Input from "../inputs/Input";
+
 import Modal from "./Modal";
 import MediaItem from "../MediaItem";
 
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import useGetSongsByTitle from "@/hooks/useGetSongsByTitle";
+import { Input } from "../ui/input";
 
 const SearchModal = () => {
-
   const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState<string>("");
   const debouncedValue = useDebounce<string>(value, 500);
   const { songs } = useGetSongsByTitle(debouncedValue);
-
-
-
-
 
   const searchModal = useSearchModal();
   const router = useRouter();
@@ -35,30 +30,18 @@ const SearchModal = () => {
     },
   });
 
-  const onChange = (open: boolean) => {
-    if (!open) {
-      reset();
-      searchModal.onClose();
-    }
-  };
-
-
   const handleClickSong = (song: Song) => {
     setIsLoading(true);
-    router.push(`search/${song.id}`)
-    searchModal.onClose()
-    setValue("")
+    router.push(`search/${song.id}`);
+    searchModal.onClose();
+    setValue("");
     setIsLoading(false);
     reset();
-  }
-
-
+  };
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
-
     try {
       setIsLoading(true);
-
 
       const query = {
         title: value,
@@ -69,7 +52,7 @@ const SearchModal = () => {
         query,
       });
 
-      setValue("")
+      setValue("");
       setIsLoading(false);
       reset();
       router.push(url);
@@ -79,15 +62,11 @@ const SearchModal = () => {
     }
   };
 
-
-
-
-
   return (
     <Modal
       isOpen={searchModal.isOpen}
       title={"Tìm một bài hát"}
-      onChange={onChange}
+      onClose={searchModal.onClose}
       description=""
     >
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -100,11 +79,17 @@ const SearchModal = () => {
         />
       </form>
       {
-        <div className="mt-2">
+        <div className="mt-2 flex flex-col gap-y-2">
           {songs.map((song) => {
-            return <MediaItem  key={song.id} data={song} onClick={() => {
-              handleClickSong(song)
-            }} />;
+            return (
+              <MediaItem
+                key={song.id}
+                data={song}
+                onClick={() => {
+                  handleClickSong(song);
+                }}
+              />
+            );
           })}
         </div>
       }

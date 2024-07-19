@@ -1,19 +1,24 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { BsPauseFill, BsPlayFill } from "react-icons/bs";
-import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
-import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 
 import { Song } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
-
-import LikeButton from "./LikeButton";
 import MediaItem from "./MediaItem";
-import VolumeSlider from "./VolumeSlider";
-import ProgessSlider from "./ProgessSlider";
 import useMobilePlayerModal from "@/hooks/useMobilePlayerModal";
 import MobilePlayerModal from "./modals/MobilePlayerModal";
+import {
+  ChevronsLeft,
+  ChevronsRight,
+  Pause,
+  Play,
+  Repeat,
+  Shuffle,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
+import { Button } from "./ui/button";
+import { Slider } from "./ui/slider";
 
 interface PlayerContentProps {
   song: Song;
@@ -26,12 +31,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
   const [progress, setProgress] = useState(0);
 
-  const toggleMuteVolume = useRef<number>(player.volume);
-
   const audioRef = useRef<HTMLAudioElement>(new Audio(songUrl));
-
-
-  
 
   const intervalRef = useRef<NodeJS.Timer>();
   const mobilePlayerModal = useMobilePlayerModal();
@@ -53,8 +53,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     );
   };
 
-  const Icon = isPlaying ? BsPauseFill : BsPlayFill;
-  const VolumeIcon = player.volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
+  const Icon = isPlaying ? Pause : Play;
+  const VolumeIcon = player.volume === 0 ? VolumeX : Volume2;
 
   const onPlayNext = () => {
     if (player.ids.length === 0) {
@@ -128,7 +128,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   };
 
   const onPlay = () => {
-
     if (!audioRef.current.src) {
       return;
     }
@@ -143,8 +142,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     setIsPlaying(false);
   };
 
-  const handlePlay = (e:any) => {
-    e.stopPropagation()
+  const handlePlay = (e: any) => {
+    e.stopPropagation();
     if (!isPlaying) {
       audioRef.current.play();
     } else {
@@ -158,12 +157,11 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     }
 
     if (audioRef.current?.volume === 0) {
-      audioRef.current.volume = toggleMuteVolume.current;
-      player.setVolume(toggleMuteVolume.current);
+      audioRef.current.volume = player.prevVolume;
+      player.toggleMute();
     } else if (audioRef.current?.volume !== 0) {
-      toggleMuteVolume.current = audioRef.current.volume;
       audioRef.current.volume = 0;
-      player.setVolume(0);
+      player.toggleMute();
     }
   };
 
@@ -186,117 +184,141 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   };
 
   audioRef.current.onended = () => {
-    console.log('1')
-    audioRef.current.pause()
-   
+    console.log("1");
+    audioRef.current.pause();
+
     if (player.isRepeated) {
-      console.log('2')
-      audioRef.current.play()
-      onPlay()
-      return
+      console.log("2");
+      audioRef.current.play();
+      onPlay();
+      return;
     }
-    console.log('3')
+    console.log("3");
     onPlayNext();
   };
 
   useEffect(() => {
-    console.log('5')
+    console.log("5");
     audioRef.current.play();
 
     return () => {
-      console.log('4')
+      console.log("4");
       audioRef.current.pause();
-      
     };
-   
   }, [audioRef.current]);
 
   return (
     <>
-      <div className=" hidden grid-cols-3 h-full md:grid ">
-        <div className="flex w-full items-center gap-1 justify-start col-span-">
+      <div className="hidden h-full lg:flex justify-between gap-x-2  ">
+        <div className="flex w-full items-center gap-1 justify-start">
           <div className="overflow-hidden">
             <MediaItem data={song} />
           </div>
-          <LikeButton songId={song.id} />
         </div>
         <div
           className="
-              
               h-full
               flex 
               flex-col
               justify-start 
               items-center 
               w-full 
-              gap-2
-              max-w-[722px]
-              col-span-1
-             
-             
+              gap-y-2
             "
         >
-          <div className="flex justify-center items-center gap-6">
-            <AiFillStepBackward
-              onClick={onPlayPrevious}
-              size={20}
-              className="
-                text-neutral-400 
-                cursor-pointer 
-                hover:text-white 
+          <div className="flex  justify-center items-center gap-6">
+            <Button
+              variant={"link"}
+              size={"icon"}
+              onClick={() => {
+                player.toggleRepeat();
+              }}
+            >
+              <Repeat
+                size={20}
+                className={player.isRepeated ? `` : `text-gray-400`}
+              />
+            </Button>
+            <Button variant={"link"} size={"icon"} onClick={onPlayPrevious}>
+              <ChevronsLeft
+                size={25}
+                className="
+                hover:opacity-50
                 transition
               "
-            />
-            <div
+              />
+            </Button>
+
+            <Button
+              variant={"link"}
               onClick={handlePlay}
               className="
                 flex 
                 items-center 
                 justify-center
                 h-[35px]
-                w-[35px]
-                rounded-full 
-                bg-white 
+                w-[35px] 
                 p-[2px] 
                 cursor-pointer
-              "
-            >
-              <Icon size={25} className="text-black" />
-            </div>
-            <AiFillStepForward
-              onClick={onPlayNext}
-              size={20}
-              className="
-                text-neutral-400 
-                cursor-pointer 
-                hover:text-white 
+                hover:opacity-90
                 transition
               "
-            />
+            >
+              <Icon size={25} />
+            </Button>
+            <Button variant={"link"} size={"icon"} onClick={onPlayNext}>
+              <ChevronsRight
+                size={25}
+                className="
+               hover:opacity-50
+                transition
+              "
+              />
+            </Button>
+            <Button
+              variant={"link"}
+              size={"icon"}
+              onClick={() => {
+                player.toggleRandom();
+              }}
+            >
+              <Shuffle
+                size={20}
+                className={player.isRandom ? `` : `text-gray-400`}
+              />
+            </Button>
           </div>
           <div className=" w-full flex items-center gap-1">
             {calculateTime(progress)}
-            <ProgessSlider
-              value={progress}
-              duration={duration}
-              onChange={(value) => {
-                handleProgressChange(value);
+
+            <Slider
+              value={[progress]}
+              defaultValue={[1]}
+              max={duration}
+              step={1}
+              onValueChange={(value) => {
+                handleProgressChange(value[0]);
               }}
             />
             {calculateTime(duration)}
           </div>
         </div>
-        <div className="col-span-1 flex w-full justify-end pr-2">
+        <div className=" flex w-full justify-end">
           <div className="flex items-center gap-x-2 w-[120px]">
-            <VolumeIcon
-              onClick={toggleMute}
-              className="cursor-pointer"
-              size={34}
-            />
-            <VolumeSlider
-              value={player.volume}
-              onChange={(value) => {
-                handleVolumeChange(value);
+            <Button size={"icon"} variant={"link"}>
+              <VolumeIcon
+                onClick={toggleMute}
+                className="cursor-pointer"
+                size={25}
+              />
+            </Button>
+            <Slider
+              value={[player.volume]}
+              defaultValue={[1]}
+              max={1}
+              step={0.1}
+              onValueChange={(value) => {
+                handleVolumeChange(value[0]);
               }}
             />
           </div>
@@ -304,14 +326,13 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
       </div>
 
       <div
-        className="grid grid-cols-3 h-full md:hidden"
+        className="grid grid-cols-3 h-full lg:hidden"
         onClick={mobilePlayerModal.onOpen}
       >
         <div className="flex w-full items-center gap-1 justify-start col-span-2 ">
           <div className="overflow-hidden">
             <MediaItem data={song} />
           </div>
-          <LikeButton songId={song.id} />
         </div>
 
         <div
@@ -323,22 +344,21 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             col-span-1
           "
         >
-          <div
+          <Button
             onClick={handlePlay}
+            variant={"link"}
             className="
-              h-10
-              w-10
+             
               flex 
               items-center 
-              justify-center 
-              rounded-full 
-              bg-white 
-              p-1 
+              justify-center  
+             
+              r-4
               cursor-pointer
             "
           >
-            <Icon size={30} className="text-black" />
-          </div>
+            <Icon size={30} />
+          </Button>
         </div>
       </div>
       <MobilePlayerModal

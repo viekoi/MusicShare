@@ -1,14 +1,21 @@
 "use client";
 import React from "react";
-import * as Dialog from "@radix-ui/react-dialog";
-import { IoMdClose } from "react-icons/io";
-import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 
 import { Song } from "@/types";
 import useMobilePlayerModal from "@/hooks/useMobilePlayerModal";
-import ProgessSlider from "../ProgessSlider";
 import useLoadImage from "@/hooks/useLoadImage";
-
+import { Button } from "../ui/button";
+import { ChevronsLeft, ChevronsRight, Repeat, Shuffle } from "lucide-react";
+import usePlayer from "@/hooks/usePlayer";
+import { Slider } from "../ui/slider";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface MobilePlayerModalProps {
   song: Song;
@@ -17,13 +24,12 @@ interface MobilePlayerModalProps {
   handleProgressChange: (value: number) => void;
   calculateTime: (duration: number) => JSX.Element;
   onPlayPrevious: () => void;
-  handlePlay: (e:any) => void;
+  handlePlay: (e: any) => void;
   onPlayNext: () => void;
   playIcon: any;
 }
 
 const MobilePlayerModal: React.FC<MobilePlayerModalProps> = ({
-
   song,
   duration,
   progress,
@@ -35,21 +41,22 @@ const MobilePlayerModal: React.FC<MobilePlayerModalProps> = ({
   playIcon: Icon,
 }) => {
   const mobilePlayerModal = useMobilePlayerModal();
-
+  const player = usePlayer();
   const onChange = (open: boolean) => {
     if (!open) {
       mobilePlayerModal.onClose();
     }
   };
   const imgPath = useLoadImage(song.image_path);
+
   return (
-    <Dialog.Root
+    <Dialog
       open={mobilePlayerModal.isOpen}
       defaultOpen={mobilePlayerModal.isOpen}
       onOpenChange={onChange}
     >
-      <Dialog.Portal>
-        <Dialog.Overlay
+      <DialogPortal>
+        <DialogOverlay
           className="
           bg-neutral-900/90 
           backdrop-blur-sm 
@@ -58,7 +65,7 @@ const MobilePlayerModal: React.FC<MobilePlayerModalProps> = ({
           z-50
         "
         />
-        <Dialog.Content
+        <DialogContent
           className="
           fixed 
           drop-shadow-md 
@@ -80,7 +87,7 @@ const MobilePlayerModal: React.FC<MobilePlayerModalProps> = ({
           flex-col
         "
         >
-          <Dialog.Title
+          <DialogTitle
             className="
             text-xl 
             text-center 
@@ -89,8 +96,8 @@ const MobilePlayerModal: React.FC<MobilePlayerModalProps> = ({
           "
           >
             {song.title}
-          </Dialog.Title>
-          <Dialog.Description
+          </DialogTitle>
+          <DialogDescription
             className="
             mb-5 
             text-sm 
@@ -99,38 +106,58 @@ const MobilePlayerModal: React.FC<MobilePlayerModalProps> = ({
           "
           >
             {song.author}
-          </Dialog.Description>
+          </DialogDescription>
 
           <div className="flex flex-col items-center flex-1 justify-between">
             <div className=" w-full h-[60vh] object-cover flex flex-row items-center justify-center">
               {imgPath && (
-               <img src={imgPath} className=" max-w-[100vw] max-h-[60vh]" alt="image" />
+                <img
+                  src={imgPath}
+                  className=" max-w-[100vw] max-h-[60vh]"
+                  alt="image"
+                />
               )}
             </div>
             <div className=" w-full flex flex-col gap-4">
               <div className=" w-full flex items-center gap-1">
                 {calculateTime(progress)}
-                <ProgessSlider
-                  value={progress}
-                  duration={duration}
-                  onChange={(value) => {
-                    handleProgressChange(value);
+                <Slider
+                  value={[progress]}
+                  defaultValue={[1]}
+                  max={duration}
+                  step={1}
+                  onValueChange={(value) => {
+                    handleProgressChange(value[0]);
                   }}
                 />
                 {calculateTime(duration)}
               </div>
               <div className="flex justify-center items-center gap-x-6 ">
-                <AiFillStepBackward
-                  onClick={onPlayPrevious}
-                  size={30}
-                  className="
-                  text-neutral-400 
-                  cursor-pointer 
-                  hover:text-white 
-                  transition
-                "
-                />
-                <div
+                <Button
+                  variant={"link"}
+                  onClick={() => {
+                    player.toggleRepeat();
+                  }}
+                >
+                  <Repeat
+                    size={20}
+                    className={player.isRepeated ? `` : `text-gray-400`}
+                  />
+                </Button>
+                <Button variant={"link"} size={"icon"}>
+                  <ChevronsLeft
+                    onClick={onPlayPrevious}
+                    size={30}
+                    className="    
+                    hover:opacity-50
+                    transition
+                  "
+                  />
+                </Button>
+
+                <Button
+                  variant={"link"}
+                  size={"icon"}
                   onClick={handlePlay}
                   className="
                   flex 
@@ -138,53 +165,40 @@ const MobilePlayerModal: React.FC<MobilePlayerModalProps> = ({
                   justify-center
                   h-[50px]
                   w-[50px]
-                  rounded-full 
-                  bg-white 
                   p-[2px] 
                   cursor-pointer
                 "
                 >
-                  <Icon size={40} className="text-black" />
-                </div>
-                <AiFillStepForward
-                  onClick={onPlayNext}
-                  size={30}
-                  className="
-                  text-neutral-400 
-                  cursor-pointer 
-                  hover:text-white 
-                  transition
+                  <Icon size={40} />
+                </Button>
+                <Button variant={"link"} size={"icon"}>
+                  <ChevronsRight
+                    onClick={onPlayNext}
+                    size={30}
+                    className="
+                hover:opacity-50
+                    transition
                 "
-                />
+                  />
+                </Button>
+
+                <Button
+                  variant={"link"}
+                  onClick={() => {
+                    player.toggleRandom();
+                  }}
+                >
+                  <Shuffle
+                    size={20}
+                    className={player.isRandom ? `` : `text-gray-400`}
+                  />
+                </Button>
               </div>
             </div>
           </div>
-
-          <Dialog.Close asChild>
-            <button
-              className="
-              text-neutral-400 
-              hover:text-white 
-              absolute 
-              top-[10px] 
-              right-[10px] 
-              inline-flex 
-              h-[25px] 
-              w-[25px] 
-              appearance-none 
-              items-center 
-              justify-center 
-              rounded-full 
-              focus:outline-none
-            "
-              aria-label="Close"
-            >
-              <IoMdClose />
-            </button>
-          </Dialog.Close>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
   );
 };
 

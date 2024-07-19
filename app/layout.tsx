@@ -6,12 +6,11 @@ import UserProvider from "@/providers/UserProvider";
 import ModalProvider from "@/providers/ModalProvider";
 import Navbar from "@/components/navbar/Navbar";
 import Player from "@/components/Player";
-import QueryProvider from "@/providers/QueryProvider";
 
 const poppins = Poppins({ subsets: ["latin"], weight: "400" });
 
 export const metadata = {
-  title: "Vkoi Music",
+  title: "Music Share",
   description: "music and chill!!!",
 };
 
@@ -23,17 +22,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <QueryProvider>
-          <SupabaseProvider>
-            <UserProvider>
-              <ToasterProvider />
-              <ModalProvider />
+        <SupabaseProvider>
+          <UserProvider>
+            <ToasterProvider />
+            <ModalProvider />
+            <div className="relative min-h-screen h-full w-full flex flex-col">
               <Navbar />
               {children}
               <Player />
-            </UserProvider>
-          </SupabaseProvider>
-        </QueryProvider>
+            </div>
+          </UserProvider>
+        </SupabaseProvider>
       </body>
     </html>
   );

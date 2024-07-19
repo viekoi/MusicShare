@@ -5,34 +5,38 @@ import useLoadSongUrl from "@/hooks/useLoadSongUrl";
 import useGetSongById from "@/hooks/useGetSonngById";
 
 import PlayerContent from "./PlayerContent";
+import StaticPlayerContent from "./StaticPlayerContent";
 
 const Player = () => {
   const player = usePlayer();
   const { song } = useGetSongById(player.activeId);
 
   const songUrl = useLoadSongUrl(song!);
-
-  if (!song || !songUrl || !player.activeId) {
-    return null;
-  }
-
   return (
-    <div 
-      className="
-        fixed 
+    <div
+      className="  fixed 
         bottom-0 
         bg-black 
-        w-full 
+        w-full
+        pr-[var(--removed-body-scroll-bar-size)]"
+    >
+      <div
+        className="
         py-2 
         h-[80px] 
-        px-4
         z-[50]
+        w-full
+        px-4
       "
-    >
-      <PlayerContent key={songUrl} song={song} songUrl={songUrl} />
-      
+      >
+        {!song || !songUrl || !player.activeId ? (
+          <StaticPlayerContent />
+        ) : (
+          <PlayerContent key={songUrl} song={song} songUrl={songUrl} />
+        )}
+      </div>
     </div>
   );
-}
+};
 
 export default Player;

@@ -1,14 +1,21 @@
 
-import getSongsByUserId from '@/actions/server/getSongsByUserId'
-import PageContent from '@/components/PageContent'
+import getSongsByUserId from "@/actions/server/getSongsByUserId";
+import TableContent from "@/components/TableContent";
+import { SupaServer } from "@/lib/supabase/server-component";
+import { redirect } from "next/navigation";
 
 
-export const revalidate = 0
 
 export default async function Uploaded() {
+  const supabase = SupaServer();
+  const { data: sessionData, error: sessionError } =
+    await supabase.auth.getSession();
 
-  const songs = await getSongsByUserId()
+  if (!sessionData.session || sessionError) {
+    redirect("/");
+  }
+  const songs = await getSongsByUserId();
   return (
-   <PageContent songs={songs} />
-  )
+    <TableContent songs={songs}/>
+  );
 }
