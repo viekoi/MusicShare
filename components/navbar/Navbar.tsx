@@ -49,6 +49,7 @@ const Navbar = () => {
             </>
           ) : (
             <Button
+              data-cy="LoginButton"
               className="text-white w-full lg:w-fit"
               onClick={authModal.onOpen}
             >

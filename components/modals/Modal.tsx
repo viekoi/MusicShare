@@ -19,8 +19,11 @@ interface ModalProps {
   onClose: () => void;
   children?: React.ReactNode;
   className?: string;
+
+  [key: string]: any;
 }
 import { cn } from "@/lib/utils";
+import { DialogOverlay } from "@radix-ui/react-dialog";
 
 const Modal: React.FC<ModalProps> = ({
   isOpen,
@@ -29,18 +32,19 @@ const Modal: React.FC<ModalProps> = ({
   children,
   onClose,
   className,
+  ...rest
 }) => {
   const onChange = (open: boolean) => {
     if (!open) {
       onClose();
     }
   };
-
   return (
     <Dialog open={isOpen} defaultOpen={isOpen} onOpenChange={onChange}>
-      <DialogContent
-        className={cn(
-          `
+      <DialogOverlay>
+        <DialogContent
+          className={cn(
+            `
         overflow-y-auto
         fixed 
         border 
@@ -60,12 +64,13 @@ const Modal: React.FC<ModalProps> = ({
         focus:outline-none
         z-50
         `,
-          className
-        )}
-      >
-        {title && (
-          <DialogTitle
-            className="
+            className
+          )}
+          {...rest}
+        >
+          {title && (
+            <DialogTitle
+              className="
               text-xl 
               text-center 
               font-bold 
@@ -73,25 +78,26 @@ const Modal: React.FC<ModalProps> = ({
               border-b-[1px]
               border-solid
               "
-          >
-            {title}
-          </DialogTitle>
-        )}
-        {description && (
-          <DialogDescription
-            className="
+            >
+              {title}
+            </DialogTitle>
+          )}
+          {description && (
+            <DialogDescription
+              className="
         mb-5 
         text-sm 
         leading-normal 
         text-center
       "
-          >
-            {description}
-          </DialogDescription>
-        )}
+            >
+              {description}
+            </DialogDescription>
+          )}
 
-        {children}
-      </DialogContent>
+          {children}
+        </DialogContent>
+      </DialogOverlay>
     </Dialog>
   );
 };
