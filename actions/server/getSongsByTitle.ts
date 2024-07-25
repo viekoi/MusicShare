@@ -1,10 +1,10 @@
-import { SupaServer } from "@/lib/supabase/server-component";
+import { supaServer } from "@/lib/supabase/server-component";
 import { Song } from "@/types";
 
 import getSongs from "./getSongs";
 
 const getSongsByTitle = async (title: string): Promise<Song[]> => {
-  const supabase = SupaServer();
+  const supabase = supaServer();
 
   if (!title) {
     const allSongs = await getSongs();

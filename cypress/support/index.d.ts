@@ -8,7 +8,7 @@ declare global {
   namespace Cypress {
     interface Chainable {
       dataCy(value: string): Chainable<Element>;
-      signIn(credentials: { email: string; password: string }): void;
+      signIn(credentials: { email: string; password: string },redirect?:string): void;
     }
   }
 }

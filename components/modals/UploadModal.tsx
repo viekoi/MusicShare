@@ -17,6 +17,7 @@ const UploadModal = () => {
       description=""
       isOpen={uploadModal.isOpen}
       onClose={uploadModal.onClose}
+      data-cy="uploadSongModal"
     >
       <UploadSongForm />
     </Modal>

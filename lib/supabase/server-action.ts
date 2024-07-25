@@ -2,7 +2,7 @@ import { supabase } from "@supabase/auth-ui-shared";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-export default function SupaServerAction() {
+export default function supaServerAction() {
   const serverAction = async () => {
     "use server";
 

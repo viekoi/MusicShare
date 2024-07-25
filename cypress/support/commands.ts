@@ -39,15 +39,15 @@ import supaLogin from "../tasks/supaSignIn";
 //   }
 // }
 
-
-
 Cypress.Commands.add("dataCy", (value) => {
   cy.get(`[data-cy=${value}]`);
 });
 
-Cypress.Commands.add("signIn", (credentials) => {
+Cypress.Commands.add("signIn", (credentials, redirect) => {
   supaLogin(credentials.email, credentials.password);
   cy.session([credentials.email, credentials.password], () => {
     cy.log(`Signing in with ${credentials.email}`);
   });
+
+  cy.visit(redirect ? redirect : "/");
 });

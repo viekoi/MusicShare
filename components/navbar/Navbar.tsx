@@ -42,14 +42,14 @@ const Navbar = () => {
           </Button>
           {user ? (
             <>
-              <Button variant={"link"} onClick={uploadModal.onOpen}>
+              <Button data-cy="uploadSongButton" variant={"link"} onClick={uploadModal.onOpen}>
                 <Plus size={20} />
               </Button>
               <Dropdown />
             </>
           ) : (
             <Button
-              data-cy="LoginButton"
+              data-cy="loginButton"
               className="text-white w-full lg:w-fit"
               onClick={authModal.onOpen}
             >

@@ -112,6 +112,7 @@ const UploadSongForm = () => {
   return (
     <Form {...form}>
       <form
+        data-cy="uploadSongForm"
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-y-4"
       >
@@ -122,9 +123,13 @@ const UploadSongForm = () => {
             <FormItem>
               <FormLabel>Tên bài hát</FormLabel>
               <FormControl>
-                <Input placeholder="Nhập tên bài hát" {...field} />
+                <Input
+                  data-cy="titleInput"
+                  placeholder="Nhập tên bài hát"
+                  {...field}
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage data-cy="titleInputMessage" />
             </FormItem>
           )}
         />
@@ -136,9 +141,13 @@ const UploadSongForm = () => {
             <FormItem>
               <FormLabel>Tên tác giả</FormLabel>
               <FormControl>
-                <Input placeholder="Nhập tên tác giả" {...field} />
+                <Input
+                  data-cy="authorInput"
+                  placeholder="Nhập tên tác giả"
+                  {...field}
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage data-cy="authorInputMessage" />
             </FormItem>
           )}
         />
@@ -151,6 +160,7 @@ const UploadSongForm = () => {
               <FormLabel>Tệp MP3</FormLabel>
               <FormControl>
                 <Input
+                  data-cy="mp3FileInput"
                   className=" file:hidden text-muted-foreground "
                   {...fieldProps}
                   type="file"
@@ -160,7 +170,7 @@ const UploadSongForm = () => {
                   }}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage data-cy="mp3FileInputMessage" />
             </FormItem>
           )}
         />
@@ -173,6 +183,7 @@ const UploadSongForm = () => {
               <FormLabel>Tệp ảnh</FormLabel>
               <FormControl>
                 <Input
+                  data-cy="imageInput"
                   className="file:hidden text-muted-foreground"
                   {...fieldProps}
                   type="file"
@@ -182,11 +193,16 @@ const UploadSongForm = () => {
                   }
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage data-cy="imageInputMessage" />
             </FormItem>
           )}
         />
-        <Button className="text-white" disabled={isLoading} type="submit">
+        <Button
+          data-cy="submitButton"
+          className="text-white"
+          disabled={isLoading}
+          type="submit"
+        >
           {isLoading ? `Đang tạo...` : `Tạo ngay`}
         </Button>
       </form>

@@ -1,13 +1,10 @@
-
 import getSongsByUserId from "@/actions/server/getSongsByUserId";
 import TableContent from "@/components/TableContent";
-import { SupaServer } from "@/lib/supabase/server-component";
+import { supaServer } from "@/lib/supabase/server-component";
 import { redirect } from "next/navigation";
 
-
-
 export default async function Uploaded() {
-  const supabase = SupaServer();
+  const supabase = supaServer();
   const { data: sessionData, error: sessionError } =
     await supabase.auth.getSession();
 
@@ -15,7 +12,5 @@ export default async function Uploaded() {
     redirect("/");
   }
   const songs = await getSongsByUserId();
-  return (
-    <TableContent songs={songs}/>
-  );
+  return <TableContent songs={songs} />;
 }

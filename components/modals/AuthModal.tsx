@@ -31,7 +31,7 @@ const AuthModal = () => {
       description="Đăng nhập vào tài khoản của bạn."
       isOpen={isOpen}
       onClose={onClose}
-      data-cy="AuthModal"
+      data-cy="authModal"
     >
       <Auth
         supabaseClient={supabaseClient}

@@ -1,9 +1,9 @@
-import { SupaServer } from "@/lib/supabase/server-component";
+import { supaServer } from "@/lib/supabase/server-component";
 
 import { Song } from "@/types";
 
 const getSongs = async (): Promise<Song[]> => {
-  const supabase = SupaServer();
+  const supabase = supaServer();
 
   const { data, error } = await supabase
     .from("songs")

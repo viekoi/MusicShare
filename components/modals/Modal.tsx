@@ -78,6 +78,7 @@ const Modal: React.FC<ModalProps> = ({
               border-b-[1px]
               border-solid
               "
+              data-cy="modalTitle"
             >
               {title}
             </DialogTitle>

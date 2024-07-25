@@ -1,10 +1,7 @@
-import { createBrowserClient } from "@supabase/ssr";
+import supaClient from "../lib/supabase/supabase-client";
 
 export default async function supaLogin(email: string, password: string) {
-  const supabase = createBrowserClient(
-    Cypress.env("NEXT_PUBLIC_SUPABASE_URL")!,
-    Cypress.env("NEXT_PUBLIC_SUPABASE_ANON_KEY")!
-  );
+  const supabase = supaClient();
   console.log(email, password);
   return await supabase.auth
     .signInWithPassword({

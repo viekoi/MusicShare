@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import SupaClient from "@/lib/supabase/client-component";
+import supaClient from "@/lib/supabase/client-component";
 
 const SupabaseSessionProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const [supabase] = useState(() => SupaClient());
+  const [supabase] = useState(() => supaClient());
 
   return (
     <SessionContextProvider supabaseClient={supabase}>
