@@ -19,7 +19,7 @@ const TableContent: React.FC<TableContentProps> = ({ songs }) => {
   } = useDeleteSongsByIds();
   
   return (
-    <div className="px-4">
+    <div className="px-4 pb-[80px]">
       <DataTable
         columns={songColumns}
         data={songs}

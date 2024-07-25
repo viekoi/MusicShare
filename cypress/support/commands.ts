@@ -51,3 +51,73 @@ Cypress.Commands.add("signIn", (credentials, redirect) => {
 
   cy.visit(redirect ? redirect : "/");
 });
+
+Cypress.Commands.add(
+  "uploadSongFormTest",
+  ({ title, imageFilePath, mp3FilePath, author, isValid }) => {
+    const email = Cypress.env("CY_TEST_EMAIL");
+    const password = Cypress.env("CY_TEST_PASSWORD");
+    if (isValid) {
+      cy.intercept(
+        "POST",
+        `${Cypress.env("NEXT_PUBLIC_SUPABASE_URL")}/storage/v1/object/songs/*`
+      ).as("uploadSong");
+
+      cy.intercept(
+        "POST",
+        `${Cypress.env("NEXT_PUBLIC_SUPABASE_URL")}/storage/v1/object/images/*`
+      ).as("uploadImage");
+
+      cy.intercept(
+        "POST",
+        `${Cypress.env("NEXT_PUBLIC_SUPABASE_URL")}/rest/v1/songs`
+      ).as("createSongRecord");
+    }
+
+    cy.dataCy("uploadSongButton").should("not.exist");
+    cy.signIn({ email, password });
+
+    cy.dataCy("uploadSongButton").should("be.visible").click();
+
+    cy.dataCy("uploadSongModal")
+      .should("be.visible")
+      .within(() => {
+        cy.dataCy("modalTitle")
+          .invoke("text")
+          .should("match", /chia sẽ bài hát yêu thích/i);
+      });
+
+    cy.dataCy("uploadSongForm")
+      .should("be.visible")
+      .within(() => {
+        if (title) cy.dataCy("titleInput").type(title);
+        if (author) cy.dataCy("authorInput").type(author);
+        if (mp3FilePath) cy.dataCy("mp3FileInput").selectFile(mp3FilePath);
+        if (imageFilePath) cy.dataCy("imageInput").selectFile(imageFilePath);
+
+        cy.dataCy("submitButton").should("be.visible").click();
+      });
+    if (isValid) {
+      cy.wait("@uploadSong").its("response.statusCode").should("eq", 200);
+
+      cy.wait("@uploadImage").its("response.statusCode").should("eq", 200);
+
+      cy.wait("@createSongRecord").its("response.statusCode").should("eq", 201);
+
+      cy.contains("Bài hát được tạo thành công").should("be.visible");
+
+      cy.dataCy("uploadSongModal").should("not.exist");
+    } else {
+      cy.dataCy("uploadSongForm")
+        .should("be.visible")
+        .within(() => {
+          if (!title) cy.dataCy("titleInputMessage").should("be.visible");
+          if (!author) cy.dataCy("authorInputMessage").should("be.visible");
+          if (!mp3FilePath)
+            cy.dataCy("mp3FileInputMessage").should("be.visible");
+          if (!imageFilePath)
+            cy.dataCy("imageInputMessage").should("be.visible");
+        });
+    }
+  }
+);
